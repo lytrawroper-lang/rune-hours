@@ -1,0 +1,2171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rune Hours</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Grenze+Gotisch:wght@400;600&family=Alegreya+Sans:wght@400;500;700&family=Noto+Sans+Runic&display=swap" rel="stylesheet">
+<style>
+/* A runestone: dark granite slabs with cut corners, no curves except the wheel,
+   runes carved into the stone and the live one painted red ochre as real runestones were.
+   One theme by choice. Layout: hour rune as the hero, night and day slabs side by side, wheel, dictionary. */
+:root {
+  color-scheme: dark;
+  --stone: #171b20;
+  --slab: #232931;
+  --slab-2: #1d2229;
+  --cut: #0e1114;
+  --line: #39414c;
+  --bone: #e9e2d2;
+  --ash: #a09c92;
+  --acc: 224 73 47;
+  --ochre: rgb(var(--acc));
+  --moon: #93bde3;
+  --sun: #e8b855;
+  --display: "Grenze Gotisch", "Palatino Linotype", Palatino, Georgia, serif;
+  --body: "Alegreya Sans", "Segoe UI", system-ui, sans-serif;
+  --ch: 16px;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 0 16px 56px;
+  background-color: var(--stone);
+  background-image:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .07 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"),
+    radial-gradient(120% 60% at 50% 0%, #252c35 0%, var(--stone) 70%);
+  background-repeat: repeat, no-repeat;
+  min-height: 100vh; min-height: 100dvh;
+  color: var(--bone);
+  font-family: var(--body); font-size: 1.05rem; line-height: 1.4;
+}
+main { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+
+/* glyphs */
+svg.g { display: block; overflow: visible; }
+svg.g path { fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.carved { filter: drop-shadow(0 1px 0 rgba(255,255,255,.09)) drop-shadow(0 -1px 0 rgba(0,0,0,.7)); }
+@keyframes carve { from { stroke-dashoffset: 1; } }
+svg.draw path { stroke-dasharray: 1; animation: carve 1.2s ease-out backwards; }
+@media (prefers-reduced-motion: reduce) { svg.draw path { animation: none; } }
+
+/* inscription band: the whole futhark row */
+.band {
+  display: flex; padding: 9px 0; margin-top: 18px;
+  border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+  color: var(--ash);
+}
+.band span { flex: 1; display: flex; justify-content: center; opacity: .55; }
+.band span.lit { color: var(--ochre); opacity: 1; filter: drop-shadow(0 0 6px var(--ochre)); }
+.band svg { width: 100%; max-width: 13px; height: auto; }
+
+h1 {
+  font-family: var(--display); font-weight: 600; letter-spacing: .02em;
+  font-size: clamp(3.2rem, 13vw, 6.5rem); line-height: .9; margin: 26px 0 0;
+  text-shadow: 0 2px 0 rgba(0,0,0,.6), 0 -1px 0 rgba(255,255,255,.08);
+}
+.eyebrow { font-size: .8rem; letter-spacing: .22em; text-transform: uppercase; color: var(--ash); margin: 0; }
+
+[hidden] { display: none !important; }
+/* welcome: the futhark turning slowly round the rune of this hour */
+.welcome { max-width: 900px; margin: 0 auto; padding: 44px 0 8px; text-align: center; }
+.circle-box { container-type: inline-size; width: min(100%, 380px); margin: 0 auto; }
+.circle { position: relative; width: 100cqw; height: 100cqw;
+  background: radial-gradient(circle, rgb(var(--acc) / .2) 0%, transparent 46%); }
+.circle::before, .circle::after { content: ""; position: absolute; border: 1px solid var(--line); border-radius: 50%; }
+.circle::before { inset: 0; }
+.circle::after { inset: 10cqw; }
+@keyframes orbit { to { transform: rotate(360deg); } }
+.orbit { position: absolute; inset: 0; animation: orbit 240s linear infinite; }
+@media (prefers-reduced-motion: reduce) { .orbit { animation: none; } }
+.orbit span { position: absolute; left: 50%; top: 50%; width: 4.4cqw; margin: -3.1cqw 0 0 -2.2cqw;
+  transform: rotate(var(--a)) translateY(-45cqw); color: var(--ash); }
+.orbit span.lit { color: var(--ochre); filter: drop-shadow(0 0 6px var(--ochre)); }
+.orbit svg { width: 100%; height: auto; }
+.core { position: absolute; inset: 0; display: grid; place-items: center; }
+.core svg { width: 27cqw; height: auto; color: var(--ochre);
+  filter: drop-shadow(0 0 16px rgb(var(--acc) / .6)) drop-shadow(0 -1px 0 rgba(0,0,0,.7)); }
+.core svg path { stroke-width: 2; }
+.welcome .now-line { font-variant-numeric: tabular-nums; margin: 14px 0 0; min-height: 1.4em; }
+.welcome .now-line b { color: var(--ochre); font-family: var(--display); font-weight: 600; font-size: 1.35em; letter-spacing: .02em; }
+.welcome .lead { margin: 10px auto 0; max-width: 44ch; font-size: 1.05rem; }
+.welcome .acts { justify-content: center; margin-top: 24px; }
+.back { display: inline-flex; align-items: center; gap: 8px; margin-top: 18px; color: var(--ash); text-decoration: none;
+  font-family: var(--display); font-weight: 600; font-size: 1.2rem; letter-spacing: .03em; }
+.back svg { width: 11px; height: auto; color: var(--ochre); transition: transform .2s; }
+.back:hover svg { transform: translateX(-4px); }
+.back:hover { color: var(--bone); }
+.page { display: flex; flex-direction: column; gap: 20px; }
+.nav { display: flex; flex-wrap: wrap; gap: 6px 26px; margin-top: 18px; }
+.nav a { font-family: var(--display); font-weight: 600; font-size: 1.4rem; letter-spacing: .03em;
+  color: var(--ash); text-decoration: none; padding-bottom: 4px; border-bottom: 3px solid transparent; }
+.nav a:hover { color: var(--bone); }
+.nav a[aria-current="page"] { color: var(--bone); border-bottom-color: var(--ochre); }
+.nav a:focus-visible, .back:focus-visible { outline: 2px solid var(--bone); outline-offset: 3px; }
+/* welcome entrance: the ring spins in, the runes fly on and lock to it, a flash, then the words fly in */
+html { overflow-x: clip; }
+.welcome { overflow-x: clip; }
+.circle::before, .circle::after { display: none; }
+.rings { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible;
+  animation: spin-in 1.1s cubic-bezier(.2,.8,.2,1) backwards; }
+.rings circle { fill: none; stroke: var(--line); stroke-width: .6; stroke-dasharray: 1;
+  transform-origin: 100px 100px; animation: ring-draw 1.1s ease-out backwards; }
+.rings circle.in { animation-delay: .2s; animation-direction: normal; }
+@keyframes spin-in { from { transform: rotate(-300deg) scale(.15); opacity: 0; } }
+@keyframes ring-draw { from { stroke-dashoffset: 1; stroke: var(--ochre); stroke-width: 2.4; } 70% { stroke: var(--ochre); stroke-width: 1.6; } }
+.sweep { position: absolute; inset: -1.2cqw; border-radius: 50%; opacity: 0;
+  background: conic-gradient(transparent 0 55%, var(--ochre) 96%, #fff 100%);
+  -webkit-mask: radial-gradient(closest-side, transparent calc(100% - 2.6cqw), #000 calc(100% - 2.2cqw));
+  mask: radial-gradient(closest-side, transparent calc(100% - 2.6cqw), #000 calc(100% - 2.2cqw));
+  animation: sweep 2s cubic-bezier(.3,.5,.3,1) both; }
+@keyframes sweep { 0% { opacity: 0; transform: rotate(0deg); } 12% { opacity: 1; } 78% { opacity: 1; } 100% { opacity: 0; transform: rotate(1080deg); } }
+.flash { position: absolute; inset: -12cqw; border-radius: 50%; opacity: 0; pointer-events: none;
+  background: radial-gradient(circle, #fff 0%, rgb(var(--acc) / .75) 22%, transparent 62%);
+  animation: flash .8s 1.85s ease-out both; }
+@keyframes flash { 0% { opacity: 0; transform: scale(.3); } 25% { opacity: .95; } 100% { opacity: 0; transform: scale(1.5); } }
+.orbit span { animation: attach .75s cubic-bezier(.2,.9,.3,1.2) backwards; animation-delay: calc(.7s + var(--i) * 45ms); }
+@keyframes attach {
+  from { opacity: 0; transform: rotate(calc(var(--a) - 140deg)) translateY(-90cqw) scale(2.6); }
+  60% { opacity: 1; }
+}
+.welcome h1 { animation: fly-up .75s 2.15s cubic-bezier(.2,.9,.25,1.15) backwards; }
+.welcome .now-line { animation: fly-left .6s 2.4s cubic-bezier(.2,.9,.25,1.1) backwards; }
+.welcome .lead { animation: fly-right .6s 2.55s cubic-bezier(.2,.9,.25,1.1) backwards; }
+.welcome .acts a { animation: fly-up .55s cubic-bezier(.2,.9,.25,1.15) backwards; }
+.welcome .acts a:nth-child(1) { animation-delay: 2.7s; }
+.welcome .acts a:nth-child(2) { animation-delay: 2.78s; }
+.welcome .acts a:nth-child(3) { animation-delay: 2.86s; }
+.welcome .acts a:nth-child(4) { animation-delay: 2.94s; }
+.welcome .acts a:nth-child(5) { animation-delay: 3.02s; }
+.welcome .acts a:nth-child(6) { animation-delay: 3.1s; }
+@keyframes fly-up { from { opacity: 0; transform: translateY(140px) scale(.7); } }
+@keyframes fly-left { from { opacity: 0; transform: translateX(-70vw); } }
+@keyframes fly-right { from { opacity: 0; transform: translateX(70vw); } }
+@media (prefers-reduced-motion: reduce) {
+  .welcome *, .welcome *::before, .welcome *::after { animation: none !important; }
+}
+/* welcome as a 24-hour rune dial, midnight at the top */
+.welcome { position: relative; padding-top: 56px; }
+.welcome > * { position: relative; }
+#embers { position: fixed; left: 0; top: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; animation: dial-in 2s 2.4s backwards; }
+.welcome, main { position: relative; z-index: 1; }
+.circle-box { width: min(100%, 440px); }
+.orbit { animation: none; }
+.orbit span { color: var(--bone); }
+.dial { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; animation: dial-in .9s 1.9s backwards; }
+@keyframes dial-in { from { opacity: 0; } }
+.dial circle { fill: none; stroke-width: 2; opacity: .9; }
+.dial circle.n { stroke: var(--moon); }
+.dial circle.d { stroke: var(--sun); }
+.dial text { fill: var(--ash); font-family: var(--body); font-size: 5px; letter-spacing: .9px; }
+#hand path { fill: var(--ochre); stroke: var(--ochre); stroke-width: 1.4; stroke-linecap: round;
+  filter: drop-shadow(0 0 3px var(--ochre)); }
+.rule { display: flex; align-items: center; justify-content: center; gap: 12px; margin: 14px 0 2px;
+  animation: fly-up .6s 2.3s cubic-bezier(.2,.9,.25,1.15) backwards; }
+.rule::before, .rule::after { content: ""; width: min(22vw, 110px); height: 1px; background: var(--line); }
+.rule i { width: 9px; height: 9px; border: 2px solid var(--ochre); transform: rotate(45deg); }
+.welcome .acts a.main { font-size: 1.2rem; padding: 13px 34px; }
+.doors { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin: 26px auto 0; max-width: 780px; }
+.doors a { flex: 1 1 128px; max-width: 150px; display: flex; flex-direction: column; align-items: center; gap: 10px;
+  padding: 16px 8px 14px; text-decoration: none; color: var(--bone);
+  background: linear-gradient(170deg, var(--slab), var(--slab-2));
+  clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);
+  font-family: var(--display); font-weight: 600; font-size: 1.1rem; letter-spacing: .03em; line-height: 1.15;
+  transition: transform .2s, filter .2s;
+  animation: fly-up .55s cubic-bezier(.2,.9,.25,1.15) backwards; }
+.doors svg { width: 22px; height: auto; color: var(--ochre);
+  filter: drop-shadow(0 1px 0 rgba(255,255,255,.09)) drop-shadow(0 -1px 0 rgba(0,0,0,.7)); transition: filter .2s; }
+.doors a:hover { transform: translateY(-4px); filter: brightness(1.2); }
+.doors a:hover svg { filter: drop-shadow(0 0 6px var(--ochre)); }
+.doors a:focus-visible { outline: 2px solid var(--bone); outline-offset: -5px; }
+.doors a:nth-child(1) { animation-delay: 2.82s; } .doors a:nth-child(2) { animation-delay: 2.9s; }
+.doors a:nth-child(3) { animation-delay: 2.98s; } .doors a:nth-child(4) { animation-delay: 3.06s; }
+.doors a:nth-child(5) { animation-delay: 3.14s; }
+/* hero: the rune of this hour */
+.hero {
+  display: grid; grid-template-columns: auto 1fr; gap: clamp(18px, 5vw, 44px); align-items: center;
+  padding: 6px 0 4px;
+}
+.hero svg { width: clamp(96px, 26vw, 170px); height: auto; color: var(--ochre);
+  filter: drop-shadow(0 0 14px rgb(var(--acc) / .55)) drop-shadow(0 -1px 0 rgba(0,0,0,.7)); }
+.hero svg path { stroke-width: 2; }
+.hero .name { font-family: var(--display); font-weight: 600; font-size: clamp(2.2rem, 8vw, 3.8rem); line-height: 1; margin: 6px 0 8px; }
+.hero .when { font-variant-numeric: tabular-nums; font-weight: 700; margin: 0 0 6px; }
+.hero .when i { font-style: normal; font-weight: 400; color: var(--ash); }
+.hero .means { margin: 0; color: var(--ash); max-width: 46ch; }
+.hero .means b { color: var(--bone); font-weight: 500; }
+
+/* slabs */
+section.slab {
+  background: linear-gradient(170deg, var(--slab), var(--slab-2));
+  padding: 20px 20px 14px;
+  clip-path: polygon(var(--ch) 0, calc(100% - var(--ch)) 0, 100% var(--ch), 100% calc(100% - var(--ch)),
+    calc(100% - var(--ch)) 100%, var(--ch) 100%, 0 calc(100% - var(--ch)), 0 var(--ch));
+}
+h2 {
+  font-family: var(--display); font-weight: 600; font-size: 1.7rem; letter-spacing: .03em; line-height: 1.1;
+  margin: 0 0 10px; padding-bottom: 8px; border-bottom: 2px solid currentColor;
+}
+.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+@media (max-width: 640px) { .cols { grid-template-columns: 1fr; } }
+.night h2, .night li svg { color: var(--moon); }
+.day h2, .day li svg { color: var(--sun); }
+ul { list-style: none; margin: 0; padding: 0; }
+.hours li {
+  display: grid; grid-template-columns: 1fr 26px 5.4em; align-items: center; gap: 12px;
+  padding: 7px 8px; border-top: 1px solid var(--line);
+}
+.hours li:first-child { border-top: 0; }
+.hours svg { width: 20px; height: 28px; margin: 0 auto; }
+.time { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.rname { color: var(--ash); font-size: .95rem; }
+.hours li.now { background: rgb(var(--acc) / .13); box-shadow: inset 3px 0 0 var(--ochre); border-top-color: transparent; }
+.hours li.now svg { color: var(--ochre); filter: drop-shadow(0 0 5px var(--ochre)); }
+.hours li.now .rname { color: var(--bone); font-weight: 700; }
+.hours li.now .rname::after { content: " · now"; color: var(--ochre); }
+.hours li.now + li { border-top-color: transparent; }
+.hours li.edit { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 7px 0; }
+.slab input, .slab select { font: inherit; color: var(--bone); background: var(--cut);
+  border: 1px solid var(--line); padding: 5px 6px; min-width: 0; }
+.hours select { flex: 1; min-width: 7.5em; }
+.hours input:focus-visible, .hours select:focus-visible { outline: 2px solid var(--bone); outline-offset: 1px; }
+.msg { color: var(--ash); font-size: .9rem; margin: 8px 0 0; min-height: 1.3em; }
+.lead { color: var(--ash); font-size: .95rem; margin: 0 0 14px; max-width: 65ch; }
+
+/* wheel: a turning stone disc */
+.wheel-sec h2, .dict h2, .plain h2 { color: var(--bone); border-bottom-color: var(--line); }
+.wheel-sec { --disc-a: #303741; --disc-b: #252b33; --disc-c: #14181c; --edge: #4b5562; --glyph: #8c95a1;
+  --c0: var(--moon); --c1: var(--sun); --c2: var(--ochre); }
+.wheel-wrap { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 430px); gap: 26px; align-items: center; }
+@media (max-width: 640px) { .wheel-wrap { grid-template-columns: 1fr; } .wheel-box { order: -1; } }
+.wheel-box { container-type: inline-size; width: 100%; max-width: 430px; margin: 0 auto; padding-left: 16px; }
+.wheel { position: relative; width: 100cqw; height: 100cqw; filter: drop-shadow(0 10px 18px rgba(0,0,0,.5)); }
+.wheel::before { content: ""; position: absolute; left: -15px; top: 50%; margin-top: -9px; z-index: 1;
+  border: 9px solid transparent; border-left: 13px solid var(--ochre); border-right: 0; }
+.k0 { --c: var(--c0); } .k1 { --c: var(--c1); } .k2 { --c: var(--c2); }
+.ring { position: absolute; left: 50%; top: 50%; border-radius: 50%; border: 2px solid var(--edge);
+  box-shadow: inset 0 2px 0 rgba(255,255,255,.07), inset 0 -6px 14px rgba(0,0,0,.45);
+  --rot: 180deg; transform: translate(-50%, -50%) rotate(var(--rot)); transition: transform 1.1s cubic-bezier(.2,.7,.2,1); }
+.ring.k0 { width: 100cqw; height: 100cqw; background: var(--disc-a); --rad: 43cqw; }
+.ring.k1 { width: 72cqw; height: 72cqw; background: var(--disc-b); --rad: 29.5cqw; }
+.ring.k2 { width: 46cqw; height: 46cqw; background: var(--disc-c); --rad: 16cqw; }
+.ring button { position: absolute; left: 50%; top: 50%; width: 10cqw; height: 10cqw; margin: -5cqw 0 0 -5cqw;
+  padding: 0; border: 0; border-radius: 50%; background: none; color: var(--glyph); cursor: pointer;
+  display: grid; place-items: center;
+  transform: rotate(var(--a)) translateX(var(--rad)) rotate(calc(-1 * var(--a) - var(--rot)));
+  transition: transform 1.1s cubic-bezier(.2,.7,.2,1), color .3s; }
+.ring button:hover { color: var(--bone); }
+.ring button:focus-visible { outline: 2px solid var(--bone); outline-offset: 1px; }
+.ring button svg { width: 4.6cqw; height: 6.4cqw; }
+.ring button.sel { color: var(--c); }
+.ring button.sel svg { filter: drop-shadow(0 0 6px var(--c)); }
+@media (prefers-reduced-motion: reduce) { .ring, .ring button { transition: none; } }
+.picks li { display: grid; grid-template-columns: 40px 1fr; gap: 14px; align-items: start; padding: 8px 0; }
+.picks svg { width: 40px; height: 52px; padding: 7px 9px; background: var(--cut); color: var(--c);
+  box-shadow: inset 0 2px 4px rgba(0,0,0,.6), 0 1px 0 rgba(255,255,255,.06); }
+.entry b { font-family: var(--display); font-weight: 600; font-size: 1.3rem; letter-spacing: .02em; }
+.entry .tag { color: var(--ash); font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; margin-left: 8px; }
+.entry .lit { display: block; }
+.entry .idea { display: block; color: var(--ash); font-size: .95rem; }
+.acts { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+.acts button, .acts a { font: inherit; font-weight: 700; padding: 9px 16px; border: 0; cursor: pointer;
+  display: inline-block; text-decoration: none;
+  background: var(--line); color: var(--bone);
+  clip-path: polygon(7px 0, calc(100% - 7px) 0, 100% 7px, 100% calc(100% - 7px), calc(100% - 7px) 100%, 7px 100%, 0 calc(100% - 7px), 0 7px); }
+.acts button.main, .acts a.main { background: var(--ochre); color: #170805; }
+.acts button:hover, .acts a:hover { filter: brightness(1.15); }
+.acts button:focus-visible, .acts a:focus-visible { outline: 2px solid var(--bone); outline-offset: -4px; }
+#hourmsg { color: var(--ash); font-size: .9rem; margin: 10px 0 0; min-height: 1.4em; }
+
+/* dictionary */
+.dict ul { display: grid; grid-template-columns: 1fr 1fr; column-gap: 28px; }
+@media (max-width: 640px) { .dict ul { grid-template-columns: 1fr; } }
+.dict li { display: grid; grid-template-columns: 36px 1fr; gap: 14px; align-items: start;
+  padding: 11px 0; border-top: 1px solid var(--line); }
+.dict svg { width: 36px; height: 48px; padding: 7px 8px; background: var(--cut); color: var(--bone);
+  box-shadow: inset 0 2px 4px rgba(0,0,0,.6), 0 1px 0 rgba(255,255,255,.06); }
+/* shared pieces for the newer pages */
+.slab input:focus-visible, .slab select:focus-visible { outline: 2px solid var(--bone); outline-offset: 1px; }
+.slab input[type="text"] { flex: 1; min-width: 12em; }
+.field { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 14px; }
+.field label { font-weight: 700; }
+.stone { flex: none; width: 84px; height: 108px; display: grid; place-items: center; background: var(--cut); color: var(--ochre);
+  box-shadow: inset 0 2px 5px rgba(0,0,0,.65), 0 1px 0 rgba(255,255,255,.06); }
+.stone svg { width: 44px; height: auto; filter: drop-shadow(0 0 7px rgb(var(--acc) / .55)); }
+.big { display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: center; }
+.entry .tag.top { display: block; margin: 0 0 2px; }
+.hero .next { margin: 10px 0 0; font-variant-numeric: tabular-nums; min-height: 1.4em; }
+.stones { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.stones figure { margin: 0; text-align: center; }
+.stones .stone { width: 100%; max-width: 150px; height: auto; aspect-ratio: 3 / 4; margin: 0 auto 10px; }
+.stones .stone svg { width: 42%; }
+.runeline { display: flex; flex-wrap: wrap; gap: 12px 6px; align-items: flex-end; min-height: 84px; padding: 16px;
+  background: var(--cut); box-shadow: inset 0 2px 5px rgba(0,0,0,.65); }
+.runeline .ch { width: 30px; text-align: center; color: var(--bone); }
+.runeline .ch svg { width: 24px; height: auto; margin: 0 auto; }
+.runeline small { display: block; color: var(--ash); font-size: .8rem; margin-top: 4px; }
+.runeline .sep { color: var(--ochre); font-size: 1.6rem; width: 14px; text-align: center; align-self: center; }
+.q-top { display: grid; grid-template-columns: auto 1fr; gap: 20px; align-items: center; margin-bottom: 16px; }
+.q-ask { font-family: var(--display); font-weight: 600; font-size: 1.5rem; line-height: 1.15; margin: 0 0 6px; }
+.choices { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 520px) { .choices { grid-template-columns: 1fr; } }
+.choices button { font: inherit; text-align: left; padding: 11px 14px; border: 0; cursor: pointer;
+  background: var(--line); color: var(--bone); }
+.choices button:hover:not(:disabled) { filter: brightness(1.2); }
+.choices button:focus-visible { outline: 2px solid var(--bone); outline-offset: 2px; }
+.choices button:disabled { cursor: default; color: var(--ash); }
+.choices button.right { color: var(--bone); box-shadow: inset 0 0 0 2px #7fd19b; }
+.choices button.right::after { content: "  ✓"; color: #7fd19b; }
+.choices button.wrong { text-decoration: line-through; box-shadow: inset 0 0 0 2px var(--ochre); }
+.q-fb { margin: 14px 0 0; }
+.journal li { display: grid; grid-template-columns: 1fr auto; gap: 4px 14px; padding: 12px 0; border-top: 1px solid var(--line); }
+.journal li:first-child { border-top: 0; }
+.journal .when { color: var(--ash); font-size: .85rem; letter-spacing: .06em; text-transform: uppercase; }
+.journal .runes { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; margin: 4px 0; }
+.journal .runes span { display: inline-flex; gap: 6px; align-items: center; }
+.journal .runes svg { width: 14px; height: auto; color: var(--ochre); }
+.journal .jnote { margin: 0; color: var(--ash); overflow-wrap: anywhere; }
+.journal button { font: inherit; font-size: .85rem; background: none; border: 1px solid var(--line); color: var(--ash);
+  padding: 3px 9px; cursor: pointer; align-self: start; }
+.journal button:hover { color: var(--bone); border-color: var(--ash); }
+.journal button:focus-visible { outline: 2px solid var(--bone); outline-offset: 2px; }
+.dict li { display: block; }
+.dict summary { display: grid; grid-template-columns: 36px 1fr auto; gap: 14px; align-items: start; cursor: pointer; list-style: none; }
+.dict summary::-webkit-details-marker { display: none; }
+.dict summary:focus-visible { outline: 2px solid var(--bone); outline-offset: 3px; }
+.dict .plus { color: var(--ash); font-size: 1.4rem; line-height: 1; transition: transform .2s; }
+.dict details[open] .plus { transform: rotate(45deg); color: var(--ochre); }
+.dict .more { margin: 10px 0 2px 50px; color: var(--ash); font-size: .95rem; max-width: 60ch; }
+.dict .more p { margin: 0 0 6px; }
+.dict .more p:first-child { color: var(--bone); }
+/* ---- later additions: timeline, games, lore, make it yours ---- */
+.tl { position: relative; height: 56px; background: var(--cut); margin-top: 4px; }
+.tl .seg { position: absolute; top: 0; bottom: 0; display: grid; place-items: center; overflow: hidden;
+  box-shadow: inset 1px 0 0 var(--stone); }
+.tl .seg.n { background: rgba(147,189,227,.17); color: var(--moon); }
+.tl .seg.d { background: rgba(232,184,85,.17); color: var(--sun); }
+.tl .seg.now { background: rgb(var(--acc) / .32); color: var(--ochre); }
+.tl .seg svg { width: min(13px, 64%); height: auto; }
+#tl-now { position: absolute; top: -6px; bottom: -6px; width: 2px; margin-left: -1px; background: var(--ochre); box-shadow: 0 0 7px var(--ochre); }
+.tl-labels { display: flex; justify-content: space-between; font-size: .78rem; color: var(--ash); margin: 8px 0 4px; }
+.yn { display: block; font-family: var(--display); font-weight: 600; font-size: 2.4rem; line-height: 1; color: var(--ochre); margin-bottom: 4px; }
+.bind-out { display: grid; grid-template-columns: auto 1fr; gap: 20px; align-items: center; margin: 4px 0 6px; }
+.bind-out .stone { width: 120px; height: 150px; }
+.bind-out .stone svg { width: 70px; }
+.bind-out p { margin: 0 0 4px; }
+.bind-out p.sum { color: var(--bone); font-weight: 700; margin-top: 8px; }
+.bind-out p.part { color: var(--ash); font-size: .95rem; }
+.bind-out p.part b { color: var(--bone); }
+#mem { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; max-width: 460px; }
+.tile { aspect-ratio: 3 / 4; display: grid; place-items: center; padding: 2px; border: 0; cursor: pointer;
+  background: var(--line); color: var(--bone); font-family: var(--display); font-weight: 600;
+  font-size: clamp(.72rem, 2.7vw, 1.05rem); overflow-wrap: anywhere; }
+.tile i { width: 12px; height: 12px; border: 2px solid var(--ash); transform: rotate(45deg); opacity: .6; }
+.tile:hover:not(.up) { filter: brightness(1.2); }
+.tile:focus-visible { outline: 2px solid var(--bone); outline-offset: 2px; }
+.tile.up { background: var(--cut); color: var(--ochre); box-shadow: inset 0 2px 5px rgba(0,0,0,.65); }
+.tile.done { opacity: .55; cursor: default; }
+.tile svg { width: 40%; height: auto; }
+.trace-wrap { display: grid; grid-template-columns: auto 1fr; gap: 22px; align-items: start; }
+@media (max-width: 560px) { .trace-wrap { grid-template-columns: 1fr; } }
+#trace { display: block; width: min(100%, 240px); aspect-ratio: 240 / 336; background: var(--cut); touch-action: none; cursor: crosshair;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,.7); }
+.check { display: flex; gap: 10px; align-items: flex-start; margin: 0 0 12px; }
+.slab input[type="checkbox"] { flex: none; width: 19px; height: 19px; margin: 2px 0 0; padding: 0; accent-color: var(--ochre); }
+.slab input[type="number"] { width: 7.5em; }
+.swatches { display: flex; flex-wrap: wrap; gap: 10px; }
+.swatches button { font: inherit; font-weight: 700; display: inline-flex; align-items: center; gap: 10px; padding: 9px 16px 9px 13px;
+  border: 0; cursor: pointer; background: var(--line); color: var(--bone); }
+.swatches button i { width: 13px; height: 13px; transform: rotate(45deg); background: rgb(var(--sw)); }
+.swatches button[aria-pressed="true"] { box-shadow: inset 0 0 0 2px var(--bone); }
+.swatches button:focus-visible { outline: 2px solid var(--bone); outline-offset: 2px; }
+.slab h3 { font-family: var(--display); font-weight: 600; font-size: 1.3rem; letter-spacing: .02em; margin: 16px 0 2px; }
+.slab .prose { margin: 0 0 8px; max-width: 65ch; color: var(--ash); }
+.aett-row { display: flex; flex-wrap: wrap; gap: 10px 6px; margin: 10px 0 6px; }
+.aett-row span { width: 62px; text-align: center; font-size: .78rem; color: var(--ash); }
+.aett-row svg { width: 20px; height: auto; margin: 0 auto 4px; color: var(--ochre); }
+.timeline li { display: grid; grid-template-columns: 7.2em 1fr; gap: 14px; padding: 10px 0; border-top: 1px solid var(--line); }
+.timeline li:first-child { border-top: 0; }
+.timeline b { font-family: var(--display); font-weight: 600; font-size: 1.1rem; color: var(--ochre); }
+.timeline span { color: var(--ash); }
+.practise { display: flex; flex-wrap: wrap; gap: 8px 18px; }
+.practise span { display: inline-flex; gap: 7px; align-items: center; }
+.practise svg { width: 14px; height: auto; color: var(--ochre); }
+.dict .more p.poem b { color: var(--bone); font-weight: 500; }
+#w-name { margin-top: 10px; animation: fly-up .6s 2.45s cubic-bezier(.2,.9,.25,1.15) backwards; }
+#w-name .runeline { display: inline-flex; justify-content: center; background: none; box-shadow: none; min-height: 0; padding: 8px 0 0; }
+#w-name .runeline .ch { color: var(--ochre); }
+.doors { max-width: 640px; }
+.doors a:nth-child(6) { animation-delay: 3.22s; } .doors a:nth-child(7) { animation-delay: 3.3s; } .doors a:nth-child(8) { animation-delay: 3.38s; }
+#toast { position: fixed; left: 50%; bottom: 24px; z-index: 6; max-width: calc(100% - 32px); padding: 11px 18px;
+  background: var(--slab); color: var(--bone); border-left: 3px solid var(--ochre); box-shadow: 0 8px 22px rgba(0,0,0,.55);
+  opacity: 0; transform: translate(-50%, 30px); transition: opacity .3s, transform .3s; pointer-events: none; }
+#toast.show { opacity: 1; transform: translate(-50%, 0); }
+#alarm-flash { position: fixed; left: 0; top: 0; width: 100%; height: 100%; z-index: 5; pointer-events: none; opacity: 0;
+  background: radial-gradient(circle, rgb(var(--acc) / .5), transparent 72%); }
+#alarm-flash.go { animation: alarm 1.8s ease-out; }
+@keyframes alarm { 0% { opacity: 0; } 12% { opacity: 1; } 100% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { #alarm-flash.go { animation: none; } }
+/* ---- menu groups, skip, moon, seasons, layouts, journal tools, card, quiz levels, extra alphabets ---- */
+.subnav { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.subnav a { font-weight: 700; font-size: .95rem; color: var(--ash); text-decoration: none; padding: 7px 14px; background: var(--slab);
+  clip-path: polygon(6px 0, calc(100% - 6px) 0, 100% 6px, 100% calc(100% - 6px), calc(100% - 6px) 100%, 6px 100%, 0 calc(100% - 6px), 0 6px); }
+.subnav a:hover { color: var(--bone); }
+.subnav a[aria-current="page"] { background: var(--line); color: var(--bone); }
+.subnav a:focus-visible { outline: 2px solid var(--bone); outline-offset: -3px; }
+.nav a[aria-current="true"] { color: var(--bone); border-bottom-color: var(--ochre); }
+#skip { position: absolute; right: 0; top: 14px; z-index: 2; font: inherit; font-weight: 700; font-size: .9rem; padding: 7px 14px;
+  background: var(--slab); color: var(--ash); border: 0; cursor: pointer; }
+#skip:hover { color: var(--bone); }
+#skip:focus-visible { outline: 2px solid var(--bone); outline-offset: 2px; }
+.welcome.skip *, .welcome.skip *::before, .welcome.skip *::after { animation: none !important; }
+.moon-line { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 6px 0 0; color: var(--ash); font-size: .95rem;
+  animation: fly-left .6s 2.48s cubic-bezier(.2,.9,.25,1.1) backwards; }
+.moon-line svg { width: 18px; height: 18px; flex: none; }
+.moon .dark { fill: var(--cut); stroke: var(--line); stroke-width: 1; }
+.moon .lit { fill: var(--bone); }
+.moon-big { display: grid; grid-template-columns: auto 1fr; gap: 22px; align-items: center; }
+.moon-big svg { width: 110px; height: 110px; filter: drop-shadow(0 0 14px rgba(233,226,210,.25)); }
+.moon-big b { font-family: var(--display); font-weight: 600; font-size: 1.7rem; display: block; line-height: 1.1; }
+.moon-big p { margin: 4px 0 0; color: var(--ash); }
+#yearwheel { display: block; width: min(100%, 460px); height: auto; margin: 0 auto 8px; overflow: visible; }
+#yearwheel circle, #yearwheel line { fill: none; stroke: var(--line); stroke-width: 1.2; }
+#yearwheel text { fill: var(--ash); font-family: var(--display); font-weight: 600; font-size: 17px; }
+#yearwheel text.next { fill: var(--ochre); }
+#yearwheel .today { stroke: var(--ochre); stroke-width: 2; }
+#yearwheel circle.dot { fill: var(--ochre); stroke: none; }
+#yearwheel circle.knob { fill: var(--line); stroke: none; }
+#yearwheel circle.knob.next { fill: var(--ochre); }
+#yearwheel text.mid { font-family: var(--body); font-weight: 400; font-size: 12px; letter-spacing: 1.5px; }
+.feasts li { display: grid; grid-template-columns: 9.5em 1fr; gap: 14px; padding: 10px 0; border-top: 1px solid var(--line); }
+.feasts li:first-child { border-top: 0; }
+.feasts b { font-family: var(--display); font-weight: 600; font-size: 1.15rem; display: block; }
+.feasts small { color: var(--ash); font-size: .85rem; }
+.feasts span { color: var(--ash); }
+.feasts li.next b { color: var(--ochre); }
+@media (max-width: 520px) { .feasts li, .timeline li { grid-template-columns: 1fr; gap: 2px; } }
+.trio { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+@media (max-width: 760px) { .trio { grid-template-columns: 1fr; } }
+.stones.l5 { grid-template-areas: ". e ." "b a c" ". d ."; max-width: 520px; margin: 0 auto; }
+.stones.l5 figure:nth-child(1) { grid-area: a; } .stones.l5 figure:nth-child(2) { grid-area: b; }
+.stones.l5 figure:nth-child(3) { grid-area: c; } .stones.l5 figure:nth-child(4) { grid-area: d; }
+.stones.l5 figure:nth-child(5) { grid-area: e; }
+.stones.l5 .stone, .stones.l9 .stone { max-width: 104px; }
+.stones.l9 { max-width: 520px; margin: 0 auto; }
+#veil { position: fixed; left: 0; top: 0; width: 100%; height: 100%; z-index: 10; overflow: auto; display: grid; place-items: center;
+  padding: 20px 16px; background: rgba(8,10,12,.9); }
+.card { width: min(100%, 380px); padding: 30px 22px 24px; text-align: center; background: linear-gradient(170deg, var(--slab), var(--stone));
+  outline: 1px solid var(--line); outline-offset: -8px; box-shadow: 0 0 0 1px var(--line), 0 18px 40px rgba(0,0,0,.6); }
+.card h3 { font-family: var(--display); font-weight: 600; font-size: 1.9rem; line-height: 1.1; margin: 6px 0 4px; }
+.card .csub { color: var(--ash); margin: 0 0 16px; overflow-wrap: anywhere; }
+.card .crunes { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px 10px; margin: 0 0 16px; }
+.card .crunes div { width: 86px; font-size: .85rem; color: var(--ash); }
+.card .crunes .stone { width: 64px; height: 82px; margin: 0 auto 6px; }
+.card .crunes .stone svg { width: 34px; }
+.card .crunes b { display: block; color: var(--bone); font-family: var(--display); font-size: 1.05rem; }
+.card .runeline { justify-content: center; background: none; box-shadow: none; min-height: 0; padding: 4px 0 14px; }
+.card .runeline .ch { color: var(--ochre); }
+.card .cfoot { margin: 0; font-size: .75rem; letter-spacing: .22em; text-transform: uppercase; color: var(--ash); }
+.cardbox { display: grid; justify-items: center; gap: 12px; width: 100%; }
+.cardbox .msg { margin: 0; }
+.dict .xset li { display: grid; grid-template-columns: 46px 1fr; gap: 14px; align-items: start; }
+.rch { width: 46px; height: 56px; display: grid; place-items: center; background: var(--cut); color: var(--bone); font-size: 1.9rem; line-height: 1;
+  font-family: "Noto Sans Runic", "Segoe UI Historic", "Segoe UI Symbol", "Noto Sans Symbols2", sans-serif;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,.6), 0 1px 0 rgba(255,255,255,.06); }
+.slab input[type="color"] { width: 48px; height: 32px; padding: 2px; cursor: pointer; }
+.tl .seg.n { background: color-mix(in srgb, var(--moon) 18%, transparent); }
+.tl .seg.d { background: color-mix(in srgb, var(--sun) 18%, transparent); }
+.doors { max-width: 520px; }
+.doors a:nth-child(9) { animation-delay: 3.46s; }
+.note { color: var(--ash); font-size: .9rem; margin: 0; max-width: 65ch; }
+</style>
+</head>
+<body>
+<canvas id="embers" aria-hidden="true"></canvas>
+<div id="alarm-flash" aria-hidden="true"></div>
+<div id="toast" role="status"></div>
+<div class="welcome" id="welcome">
+  <button type="button" id="skip">Skip</button>
+  <div class="circle-box"><div class="circle">
+    <svg class="rings" viewBox="0 0 200 200" aria-hidden="true"><circle cx="100" cy="100" r="99.4" pathLength="1"/><circle class="in" cx="100" cy="100" r="80" pathLength="1"/></svg>
+    <svg class="dial" viewBox="0 0 200 200" aria-hidden="true">
+      <g id="arcs" transform="rotate(-90 100 100)"></g>
+      <text x="100" y="36" text-anchor="middle">MIDNIGHT</text>
+      <text x="100" y="169" text-anchor="middle">NOON</text>
+      <text x="168" y="102" text-anchor="end">6 AM</text>
+      <text x="32" y="102" text-anchor="start">6 PM</text>
+      <g id="dial-moon" class="moon" transform="translate(93.5 42) scale(.65)"></g>
+      <g id="hand"><path d="M96.4 -9h7.2L100 -2z"/><path d="M100 20v5"/></g>
+    </svg>
+    <div class="sweep" aria-hidden="true"></div>
+    <div class="flash" aria-hidden="true"></div>
+    <div class="orbit" id="orbit" aria-hidden="true"></div>
+    <div class="core" id="w-core"></div>
+  </div></div>
+  <h1>Rune Hours</h1>
+  <div class="rule" aria-hidden="true"><i></i></div>
+  <div id="w-name" hidden></div>
+  <p class="now-line" id="w-now"></p>
+  <p class="moon-line" id="w-moon"></p>
+  <p class="lead">Welcome. Twenty-four runes keep the hours on this dial. Blue marks the twelve that watch the night, gold the twelve that watch the day, and the bright marker shows the time now.</p>
+  <div class="acts"><a class="main" href="#hours">Enter the hours</a></div>
+  <nav class="doors" aria-label="Pages">
+    <a href="#wheel"><svg class="g" viewBox="0 0 20 28" aria-hidden="true"><path d="M6 26V2L15 8L6 14L15 26"/></svg><span>Rune Wheel</span></a>
+    <a href="#readings"><svg class="g" viewBox="0 0 20 28" aria-hidden="true"><path d="M5 2V26M5 2L10 7L15 2M5 26L10 21L15 26"/></svg><span>Readings</span></a>
+    <a href="#write"><svg class="g" viewBox="0 0 20 28" aria-hidden="true"><path d="M6 26V2L15 9M6 10L15 17"/></svg><span>Write in Runes</span></a>
+    <a href="#quiz"><svg class="g" viewBox="0 0 20 28" aria-hidden="true"><path d="M15 5L6 14L15 23"/></svg><span>Rune Quiz</span></a>
+    <a href="#dictionary"><svg class="g" viewBox="0 0 20 28" aria-hidden="true"><path d="M4 26V2L16 12M16 26V2L4 12"/></svg><span>Rune Dictionary</span></a>
+    <a href="#games"><svg class="g" viewBox="0 0 20 28" aria-hidden="true"><path d="M6 26V2L15 8L6 14"/></svg><span>Games</span></a>
+    <a href="#lore"><svg class="g" viewBox="0 0 20 28" aria-hidden="true"><path d="M3 26L16 10L10 3L4 10L17 26"/></svg><span>Rune Lore</span></a>
+    <a href="#yours"><svg class="g" viewBox="0 0 20 28" aria-hidden="true"><path d="M4 4L16 24M16 4L4 24"/></svg><span>Make It Yours</span></a>
+    <a href="#seasons"><svg class="g" viewBox="0 0 20 28" aria-hidden="true"><path d="M11 3L4 10L11 17M9 11L16 18L9 25"/></svg><span>Moon and Seasons</span></a>
+  </nav>
+</div>
+<main id="site" hidden>
+  <header>
+    <a class="back" href="#welcome"><svg class="g" viewBox="0 0 20 28" aria-hidden="true"><path d="M15 5L6 14L15 23"/></svg>Welcome</a>
+    <div class="band" id="band" aria-hidden="true"></div>
+    <h1>Rune Hours</h1>
+    <nav class="nav" id="groups" aria-label="Sections">
+      <a href="#hours" data-group="clock">Clock</a>
+      <a href="#wheel" data-group="cast">Cast</a>
+      <a href="#dictionary" data-group="learn">Learn</a>
+      <a href="#write" data-group="yours">Yours</a>
+    </nav>
+    <nav class="subnav" id="subnav" aria-label="Pages"></nav>
+  </header>
+
+  <div class="page" id="page-hours">
+  <div class="hero" id="hero"></div>
+
+  <section class="slab plain">
+    <h2>Today</h2>
+    <div class="tl" id="tl"></div>
+    <div class="tl-labels" aria-hidden="true"><span>12 AM</span><span>6 AM</span><span>12 PM</span><span>6 PM</span><span>12 AM</span></div>
+  </section>
+  <p class="msg" id="sun-note" hidden></p>
+  <div class="cols">
+    <section class="slab hours night"><h2>Runes of the Night</h2><ul id="night"></ul>
+      <div class="acts" id="night-acts"></div><p class="msg" id="night-msg" role="status"></p></section>
+    <section class="slab hours day"><h2>Runes of the Day</h2><ul id="day"></ul>
+      <div class="acts" id="day-acts"></div><p class="msg" id="day-msg" role="status"></p></section>
+  </div>
+  <p class="msg" id="sync" role="status" hidden></p>
+  <section class="slab plain">
+    <h2>Rune of a Birth Hour</h2>
+    <p class="lead">Enter the time you were born to see which rune's hour it fell in, using the tables above.</p>
+    <div class="field"><label for="birth">Time of birth</label><input type="time" id="birth"></div>
+    <div id="birth-out"></div>
+  </section>
+  </div>
+
+
+  <div class="page" id="sec-seasons">
+    <section class="slab plain">
+      <h2>The Moon Tonight</h2>
+      <div class="moon-big" id="moon-big"></div>
+    </section>
+    <section class="slab plain">
+      <h2>Wheel of the Year</h2>
+      <p class="lead" id="feast-next"></p>
+      <svg id="yearwheel" viewBox="-235 -200 470 400" role="img" aria-label="Wheel of the year with eight festivals and a marker for today"></svg>
+      <ul class="feasts" id="feasts"></ul>
+      <p class="lead" style="margin:12px 0 4px">The wheel of the year is a modern calendar of eight festivals, put together in the twentieth century from older Gaelic, Norse and English seasonal feasts. The solstices and equinoxes move by a day or so from year to year, so those four dates are approximate. All dates are for the northern half of the world.</p>
+    </section>
+  </div>
+
+  <div class="page" id="sec-readings">
+    <section class="slab plain">
+      <h2>Runes of the Day, Week and Month</h2>
+      <p class="lead">One rune each for today, this week and this month. Each stays the same until its time is up.</p>
+      <div class="trio"><div id="daily"></div><div id="weekly"></div><div id="monthly"></div></div>
+    </section>
+    <section class="slab plain">
+      <h2>Rune Readings</h2>
+      <p class="lead">Choose a layout, then draw. The runes come from all 24 and none comes up twice in one reading.</p>
+      <div class="field"><label for="read-layout">Layout</label><select id="read-layout">
+        <option value="three">Three runes: past, present, future</option>
+        <option value="cross">Five-rune cross</option>
+        <option value="nine">Nine-rune cast</option></select></div>
+      <div class="stones" id="stones"></div>
+      <div class="acts"><button type="button" class="main" id="read-draw">Draw three runes</button></div>
+      <div id="read-save" hidden>
+        <div class="field" style="margin:14px 0 0">
+          <label for="read-note">Note</label>
+          <input type="text" id="read-note" maxlength="300" placeholder="What were you asking about?">
+          <div class="acts" style="margin:0"><button type="button" id="read-keep">Save to journal</button><button type="button" id="read-card">Make a card</button></div>
+        </div>
+      </div>
+      <p class="msg" id="read-msg" role="status"></p>
+    </section>
+    <section class="slab plain">
+      <h2>Yes or No Stone</h2>
+      <p class="lead">Ask a question that can be answered yes or no, then pull one rune from the bag.</p>
+      <div class="field"><label for="yn-q">Your question</label><input type="text" id="yn-q" maxlength="200" placeholder="Should I…?"></div>
+      <div id="yn-out"></div>
+      <div class="acts"><button type="button" class="main" id="yn-pull">Pull a rune</button><button type="button" id="yn-keep" hidden>Save to journal</button></div>
+      <p class="msg" id="yn-msg" role="status"></p>
+      <p class="lead" style="margin:6px 0 4px">Sixteen runes answer yes, four answer no and four say not yet. That split is this site's own convention.</p>
+    </section>
+    <section class="slab plain">
+      <h2>Journal</h2>
+      <p class="lead" id="journal-where">Readings and wheel casts you save are listed here, newest first.</p>
+      <div class="field"><label for="j-search">Search</label><input type="text" id="j-search" maxlength="60">
+        <label for="j-rune">Rune</label><select id="j-rune"></select></div>
+      <p class="msg" id="j-stats" style="margin:0 0 6px"></p>
+      <ul class="journal" id="journal"></ul>
+    </section>
+  </div>
+
+  <div class="page" id="sec-write">
+  <section class="slab plain">
+    <h2>Write in Runes</h2>
+    <p class="lead">Type a name or a few words to see them spelled in runes, letter by letter.</p>
+    <div class="field"><label for="write-in">Your words</label><input type="text" id="write-in" maxlength="60" value="Rune Hours"></div>
+    <div class="runeline" id="write-out"></div>
+    <p class="msg" id="write-names"></p>
+    <div class="acts"><button type="button" id="write-card">Make a card of these words</button></div>
+    <p class="lead" style="margin:10px 0 4px">This is a modern letter-for-letter spelling. TH and NG each get their own rune, C, K and Q share Kenaz, U and V share Uruz, J and Y share Jera, and X is written Kenaz then Sowilo. A dot marks the gap between words.</p>
+  </section>
+    <section class="slab plain">
+      <h2>Bind Runes</h2>
+      <p class="lead">A bind rune joins two or three runes into one sign. Choose the runes and they are laid over each other on a shared upright.</p>
+      <div class="field">
+        <label for="bind-a">First</label><select id="bind-a"></select>
+        <label for="bind-b">Second</label><select id="bind-b"></select>
+        <label for="bind-c">Third</label><select id="bind-c"></select>
+      </div>
+      <div class="bind-out" id="bind-out"></div>
+      <div class="acts"><button type="button" id="bind-keep">Save to journal</button></div>
+      <p class="msg" id="bind-msg" role="status"></p>
+    </section>
+  </div>
+
+  <div class="page" id="sec-quiz">
+  <section class="slab plain">
+    <h2>Rune Quiz</h2>
+    <div class="field"><label for="quiz-level">Level</label><select id="quiz-level">
+      <option value="">All 24 runes</option><option value="0">Freyr's eight</option><option value="1">Heimdall's eight</option><option value="2">Tyr's eight</option></select>
+      <div class="acts" style="margin:0"><button type="button" id="quiz-timed">Start a 60-second round</button></div></div>
+    <p class="msg" id="quiz-timer" style="margin:0 0 14px"></p>
+    <div id="quiz"></div>
+  </section>
+    <section class="slab plain">
+      <h2>Runes to Practise</h2>
+      <p class="lead">The quiz remembers the runes you get wrong and asks them more often until you get them right.</p>
+      <div class="practise" id="practise"></div>
+      <div class="acts"><button type="button" id="practise-reset">Clear my quiz history</button></div>
+    </section>
+  </div>
+  <div class="page" id="sec-games">
+    <section class="slab plain">
+      <h2>Rune Memory</h2>
+      <p class="lead">Twelve stones lie face down. Turn two at a time and match each rune with its name.</p>
+      <div id="mem"></div>
+      <p class="msg" id="mem-info" role="status"></p>
+      <div class="acts"><button type="button" id="mem-new">New game</button></div>
+    </section>
+    <section class="slab plain">
+      <h2>Draw a Rune</h2>
+      <p class="lead">Trace the rune on the stone with your finger or mouse, then check how close you came.</p>
+      <div class="trace-wrap">
+        <canvas id="trace" width="240" height="336" aria-label="Drawing area"></canvas>
+        <div>
+          <div id="trace-ask"></div>
+          <label class="check" style="margin-top:14px"><input type="checkbox" id="trace-guide" checked><span>Show the faint guide</span></label>
+          <div class="acts"><button type="button" class="main" id="trace-check">Check my rune</button><button type="button" id="trace-clear">Clear</button><button type="button" id="trace-new">Another rune</button></div>
+          <p class="msg" id="trace-msg" role="status"></p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="page" id="sec-lore">
+    <section class="slab plain">
+      <h2>The Three Families</h2>
+      <p class="prose">The 24 runes are traditionally split into three groups of eight, each called an aett, which means a family or a group of eight. The names used for them come from later Icelandic tradition, and each is named after the god linked with its first rune.</p>
+      <h3>Freyr's aett</h3>
+      <div class="aett-row" id="aett-0"></div>
+      <p class="prose">Named for Freyr, the god of harvests, peace and plenty; some name it for his sister Freyja instead. These runes deal with the things a household needs: wealth, strength, protection, speech, travel, light, gifts and joy.</p>
+      <h3>Heimdall's aett</h3>
+      <div class="aett-row" id="aett-1"></div>
+      <p class="prose">Named for Heimdall, the watchman of the gods; it is also called Hagal's aett after its first rune. These runes deal with forces nobody controls: hail, need, ice, the turning year, death and endurance, chance, danger and the sun.</p>
+      <h3>Tyr's aett</h3>
+      <div class="aett-row" id="aett-2"></div>
+      <p class="prose">Named for Tyr, the god of law and battle. These runes deal with people and how they live together: justice, birth, partnership, humankind, water, the seed, the day and the family home.</p>
+    </section>
+    <section class="slab plain">
+      <h2>Rune History</h2>
+      <p class="prose">Runes are an alphabet first, used by Germanic-speaking peoples for well over a thousand years. Most scholars think they were modelled on a Mediterranean alphabet, either Latin or one of the north Italic scripts.</p>
+      <ul class="timeline">
+        <li><b>About 150</b><span>The oldest known runic inscriptions are carved on combs, weapons and jewellery in what is now Denmark and northern Germany. This first alphabet of 24 runes is the Elder Futhark, named after its first six letters.</span></li>
+        <li><b>About 400</b><span>The Kylver stone on the Swedish island of Gotland is carved with the whole rune row in order, the earliest complete futhark that survives.</span></li>
+        <li><b>400s onward</b><span>Settlers take runes to England and Frisia, where new runes are added for new sounds. The Anglo-Saxon futhorc grows to around 30 runes.</span></li>
+        <li><b>About 750</b><span>In Scandinavia the row is cut down to 16 runes, the Younger Futhark. This is the alphabet of the Viking Age.</span></li>
+        <li><b>About 965</b><span>King Harald Bluetooth raises the great Jelling stone in Denmark in memory of his parents.</span></li>
+        <li><b>1000s</b><span>The height of the runestone fashion. Thousands are raised, most of them in Sweden, usually to remember the dead, and many were painted in bright colours.</span></li>
+        <li><b>1100s to 1300s</b><span>Runes carry on beside the Latin alphabet for everyday notes. Hundreds of wooden sticks found in Bergen in Norway carry trade tags, prayers, love messages and jokes.</span></li>
+        <li><b>1600s</b><span>Scholars such as Johannes Bureus in Sweden and Ole Worm in Denmark begin collecting and studying the old inscriptions.</span></li>
+        <li><b>Up to about 1900</b><span>In the Swedish region of Dalarna, a local mix of runes and Latin letters stays in use into modern times.</span></li>
+      </ul>
+    </section>
+  </div>
+
+  <div class="page" id="sec-yours">
+    <section class="slab plain">
+      <h2>Your Name</h2>
+      <p class="lead">Enter a name and the welcome page greets you with it written in runes.</p>
+      <div class="field"><label for="pref-name">Name</label><input type="text" id="pref-name" maxlength="30" autocomplete="off"></div>
+      <label class="check"><input type="checkbox" id="pref-skip"><span>Skip the welcome animation every time</span></label>
+    </section>
+    <section class="slab plain">
+      <h2>Colour</h2>
+      <p class="lead">Choose the paint used for the lit runes, markers and buttons.</p>
+      <div class="swatches" id="swatches"></div>
+      <div class="field" style="margin:18px 0 0"><label for="pref-night">Night runes</label><input type="color" id="pref-night">
+        <label for="pref-day">Day runes</label><input type="color" id="pref-day">
+        <div class="acts" style="margin:0"><button type="button" id="col-reset">Back to blue and gold</button></div></div>
+    </section>
+    <section class="slab plain">
+      <h2>Sound and Alarm</h2>
+      <label class="check"><input type="checkbox" id="pref-sound"><span>Sound: wind in the background and a carving sound when runes are drawn</span></label>
+      <label class="check"><input type="checkbox" id="pref-alarm"><span>Rune alarm: a chime, a flash and a message when the hour's rune changes, while this page is open</span></label>
+      <div class="acts"><button type="button" id="alarm-test">Test the alarm</button></div>
+      <p class="lead" style="margin:12px 0 4px">Browsers only allow sound after you click or tap, so after reopening the page the sound starts with your first click.</p>
+    </section>
+    <section class="slab plain">
+      <h2>Sunrise and Sunset</h2>
+      <p class="lead">With this on, the day runes share the time from sunrise to sunset and the night runes share the rest, so the hours grow and shrink with the seasons. The runes and their order still come from your tables.</p>
+      <label class="check"><input type="checkbox" id="pref-sun"><span>Follow sunrise and sunset</span></label>
+      <div class="field"><label for="pref-place">Place</label><select id="pref-place"></select></div>
+      <div class="field" id="pref-coords" hidden>
+        <label for="pref-lat">Latitude</label><input type="number" id="pref-lat" min="-90" max="90" step="0.01" placeholder="51.51">
+        <label for="pref-lon">Longitude</label><input type="number" id="pref-lon" min="-180" max="180" step="0.01" placeholder="-0.13">
+      </div>
+      <p class="msg" id="sun-out" role="status"></p>
+    </section>
+    <p class="note" id="prefs-where">These choices are saved in this browser.</p>
+  </div>
+
+
+  <section class="slab wheel-sec" id="sec-wheel">
+    <h2>Rune Wheel</h2>
+    <p class="lead">Each ring holds one aett, a family of eight runes. Tap a rune to turn its ring to the marker, or cast all three rings at once.</p>
+    <div class="wheel-wrap">
+      <div>
+        <ul class="picks" id="picks" aria-live="polite"></ul>
+        <div class="acts">
+          <button type="button" class="main" id="cast">Cast the runes</button>
+          <button type="button" id="hour">Turn to this hour's rune</button>
+          <button type="button" id="wheel-save">Save this cast to the journal</button>
+        </div>
+        <p id="hourmsg" role="status"></p>
+      </div>
+      <div class="wheel-box"><div class="wheel" id="wheel"></div></div>
+    </div>
+  </section>
+
+  <section class="slab dict" id="sec-dictionary">
+    <h2>Rune Dictionary</h2>
+    <div class="swatches" id="dict-sets" style="margin-bottom:14px">
+      <button type="button" data-set="elder">Elder Futhark</button>
+      <button type="button" data-set="younger">Younger Futhark</button>
+      <button type="button" data-set="anglo">Anglo-Saxon runes</button>
+    </div>
+    <p class="lead" id="dict-lead">All 24 runes of the Elder Futhark in their usual order. Each entry gives the letter sound, what the name means, and the ideas it is commonly linked with in modern rune reading. Tap a rune for more.</p>
+    <ul id="dict"></ul>
+    <ul id="dict-extra" class="xset" hidden></ul>
+  </section>
+
+  <p class="note" id="note">The starting times and runes are copied from the chalk board. Rune names and meanings are added for reference. The Isa row is read as ending at 4:35 AM to match the next row. Jera and Perthro were hard to read on the board and follow the usual rune order.</p>
+</main>
+<div id="veil" hidden>
+  <div class="cardbox">
+    <div class="card" id="card"></div>
+    <p class="msg">Take a screenshot to keep or share this card.</p>
+    <div class="acts" style="margin:0"><button type="button" class="main" id="card-close">Close</button></div>
+  </div>
+</div>
+
+<script>
+var P = {
+  Uruz: "M5 26V3L15 10V26",
+  Thurisaz: "M6 2V26M6 8L15 14L6 20",
+  Ansuz: "M6 26V2L15 9M6 10L15 17",
+  Raidho: "M6 26V2L15 8L6 14L15 26",
+  Kenaz: "M15 5L6 14L15 23",
+  Gebo: "M4 4L16 24M16 4L4 24",
+  Wunjo: "M6 26V2L15 8L6 14",
+  Hagalaz: "M5 2V26M15 2V26M5 10L15 18",
+  Nauthiz: "M10 2V26M5 10L15 18",
+  Isa: "M10 2V26",
+  Jera: "M11 3L4 10L11 17M9 11L16 18L9 25",
+  Perthro: "M5 2V26M5 2L10 7L15 2M5 26L10 21L15 26",
+  Eihwaz: "M10 2V26M10 2L16 8M10 26L4 20",
+  Algiz: "M10 2V26M4 3L10 12L16 3",
+  Sowilo: "M14 2L6 10L14 18L6 26",
+  Tiwaz: "M10 2V26M3 10L10 2L17 10",
+  Berkano: "M6 2V26M6 2L15 8L6 14L15 20L6 26",
+  Ehwaz: "M4 26V2L10 10L16 2V26",
+  Mannaz: "M4 26V2L16 12M16 26V2L4 12",
+  Laguz: "M7 26V2L15 10",
+  Ingwaz: "M10 5L18 14L10 23L2 14Z",
+  Othala: "M3 26L16 10L10 3L4 10L17 26",
+  Dagaz: "M3 4V24L17 4V24Z",
+  Fehu: "M6 26V2M6 12L15 4M6 18L15 10"
+};
+// [start, end, name] in 24-hour time
+var DEF = { night: [
+  ["16:30","17:42","Uruz"],["17:42","18:55","Thurisaz"],["18:55","20:07","Ansuz"],
+  ["20:07","21:20","Raidho"],["21:20","22:32","Kenaz"],["22:32","23:45","Gebo"],
+  ["23:45","00:57","Wunjo"],["00:57","02:10","Hagalaz"],["02:10","03:22","Nauthiz"],
+  ["03:22","04:35","Isa"],["04:35","05:47","Jera"],["05:47","07:00","Perthro"]
+], day: [
+  ["07:00","07:47","Eihwaz"],["07:47","08:35","Algiz"],["08:35","09:23","Sowilo"],
+  ["09:23","10:10","Tiwaz"],["10:10","10:58","Berkano"],["10:58","11:45","Ehwaz"],
+  ["11:45","12:33","Mannaz"],["12:33","13:20","Laguz"],["13:20","14:08","Ingwaz"],
+  ["14:08","14:55","Othala"],["14:55","15:43","Dagaz"],["15:43","16:30","Fehu"]
+] };
+function clone(x) { return JSON.parse(JSON.stringify(x)); }
+var base = clone(DEF), hours = base;
+// [name, sound, literal meaning, linked ideas]
+var dict = [
+  ["Fehu","F","Cattle, wealth","Prosperity, abundance, new beginnings"],
+  ["Uruz","U","Aurochs (wild ox)","Strength, health, raw energy"],
+  ["Thurisaz","TH","Giant, thorn","Defence, conflict, a force to handle with care"],
+  ["Ansuz","A","A god (Odin)","Speech, wisdom, messages"],
+  ["Raidho","R","Ride, wagon","Journeys, movement, rhythm"],
+  ["Kenaz","K","Torch","Knowledge, creativity, insight"],
+  ["Gebo","G","Gift","Generosity, exchange, partnership"],
+  ["Wunjo","W","Joy","Happiness, harmony, belonging"],
+  ["Hagalaz","H","Hail","Disruption, sudden change, forces outside your control"],
+  ["Nauthiz","N","Need","Hardship, restraint, endurance"],
+  ["Isa","I","Ice","Stillness, delay, focus"],
+  ["Jera","J / Y","Year, harvest","Cycles, reward for effort, patience"],
+  ["Eihwaz","EI","Yew tree","Endurance, protection, life and death"],
+  ["Perthro","P","Uncertain, often read as a dice cup","Fate, chance, mystery"],
+  ["Algiz","Z","Elk","Protection, guarding, higher guidance"],
+  ["Sowilo","S","Sun","Success, vitality, clarity"],
+  ["Tiwaz","T","The god Tyr","Justice, honour, courage"],
+  ["Berkano","B","Birch","Growth, birth, renewal"],
+  ["Ehwaz","E","Horse","Trust, teamwork, progress"],
+  ["Mannaz","M","Human, humankind","The self, community, intelligence"],
+  ["Laguz","L","Water, lake","Flow, intuition, emotion"],
+  ["Ingwaz","NG","The god Ing","Fertility, potential, rest before growth"],
+  ["Dagaz","D","Day","Dawn, breakthrough, clarity"],
+  ["Othala","O","Inherited land","Home, ancestry, heritage"]
+];
+var aetts = ["Freyr's aett", "Heimdall's aett", "Tyr's aett"];
+
+function mins(t) { var p = t.split(":"); return +p[0] * 60 + +p[1]; }
+function fmt(t) {
+  var p = t.split(":"), h = +p[0], ap = h < 12 ? "AM" : "PM";
+  h = h % 12 || 12;
+  return h + ":" + p[1] + " " + ap;
+}
+function glyph(name, cls, delay) {
+  var draw = cls && cls.indexOf("draw") >= 0;
+  return '<svg class="g ' + (cls || "") + '" viewBox="0 0 20 28" aria-hidden="true"><path' +
+    (draw ? ' pathLength="1" style="animation-delay:' + (delay || 0) + 'ms"' : "") + ' d="' + P[name] + '"/></svg>';
+}
+function entry(r, tag) {
+  return '<div class="entry"><b>' + r[0] + '</b><span class="tag">' + tag + '</span><span class="lit">' + r[2] +
+    '</span><span class="idea">' + r[3] + "</span></div>";
+}
+function dictIndex(name) { for (var n = 0; n < dict.length; n++) if (dict[n][0] === name) return n; return -1; }
+function isNow(row, m) {
+  var s = mins(row[0]), e = mins(row[1]);
+  return s < e ? (m >= s && m < e) : (m >= s || m < e);
+}
+function current() {
+  var t = new Date(), m = t.getHours() * 60 + t.getMinutes(), all = hours.night.concat(hours.day);
+  for (var j = 0; j < all.length; j++) if (isNow(all[j], m)) return { row: all[j], night: j < hours.night.length };
+  return null;
+}
+var cur = null, curName = "", heroKey = null;
+var editing = { night: false, day: false }, canWrite = true, store = null;
+var names = dict.map(function (r) { return r[0]; });
+
+// inscription band
+document.getElementById("band").innerHTML = dict.map(function (r, i) {
+  return "<span>" + glyph(r[0], "draw", i * 45) + "</span>";
+}).join("");
+
+// hero
+function drawHero() {
+  if (!cur) { document.getElementById("hero").innerHTML = ""; return; }
+  var d = dict[dictIndex(curName)];
+  document.getElementById("hero").innerHTML = glyph(curName, "draw", 300) +
+    '<div><p class="eyebrow">The rune of this hour</p><p class="name">' + curName + "</p>" +
+    '<p class="when">' + fmt(cur.row[0]) + " – " + fmt(cur.row[1]) +
+    " <i>· " + (cur.night ? "Runes of the Night" : "Runes of the Day") + "</i></p>" +
+    '<p class="means"><b>' + d[2] + ".</b> " + d[3] + '.</p><p class="next" id="countdown"></p></div>';
+}
+
+// hour tables
+// welcome circle and views: #hours, #wheel and #dictionary open the site, anything else the welcome
+var dialKey = "";
+function drawDial() {
+  var all = hours.night.concat(hours.day), k = JSON.stringify(all);
+  if (k !== dialKey) {
+    dialKey = k;
+    var items = all.map(function (r, j) {
+      var s = mins(r[0]), len = ((mins(r[1]) - s) % 1440 + 1440) % 1440;
+      return { r: r, s: s, len: len, mid: (s + len / 2) % 1440, night: j < hours.night.length };
+    });
+    var order = items.slice().sort(function (a, b) { return a.mid - b.mid; });
+    document.getElementById("orbit").innerHTML = items.map(function (it) {
+      return '<span data-k="' + it.r.join() + '" style="--a:' + it.mid / 4 + "deg;--i:" + order.indexOf(it) + '">' + glyph(it.r[2]) + "</span>";
+    }).join("");
+    document.getElementById("arcs").innerHTML = items.map(function (it) {
+      return it.len < 6 ? "" : '<circle cx="100" cy="100" r="99.4" pathLength="1440" class="' + (it.night ? "n" : "d") +
+        '" stroke-dasharray="' + (it.len - 4) + ' 1440" stroke-dashoffset="' + -(it.s + 2) + '"/>';
+    }).join("");
+  }
+  var key = cur ? cur.row.join() : "", sp = document.getElementById("orbit").children;
+  for (var o = 0; o < sp.length; o++) sp[o].classList.toggle("lit", sp[o].getAttribute("data-k") === key);
+}
+// embers drifting up behind the welcome
+(function () {
+  var cv = document.getElementById("embers"), box = document.getElementById("welcome");
+  if (!cv.getContext || (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches)) return;
+  var ctx = cv.getContext("2d"), parts = [], last = 0;
+  function spawn(p, anywhere) {
+    p.x = Math.random() * cv.width; p.y = anywhere ? Math.random() * cv.height : cv.height + 10;
+    p.v = 10 + Math.random() * 26; p.r = .6 + Math.random() * 1.6; p.ph = Math.random() * 6.3;
+    p.c = Math.random() < .75 ? "" : "232,184,85";
+    if (p.rune) {
+      p.g = new Path2D(P[runeNames[Math.floor(Math.random() * runeNames.length)]]);
+      p.v = 9 + Math.random() * 16; p.s = .7 + Math.random() * 1.3;
+      p.rot = (Math.random() - .5) * .9; p.spin = (Math.random() - .5) * .25;
+      p.c = Math.random() < .3 ? "" : Math.random() < .5 ? "147,189,227" : "233,226,210";
+      if (!anywhere) p.y = cv.height + 40;
+    }
+  }
+  var runeNames = Object.keys(P);
+  function fillParts() {
+    var area = cv.width * cv.height, runes = Math.max(12, Math.min(42, Math.round(area / 42000))),
+        sparks = Math.max(40, Math.min(130, Math.round(area / 13000)));
+    parts = [];
+    for (var i = 0; i < runes + sparks; i++) { var p = { rune: i < runes }; spawn(p, true); parts.push(p); }
+  }
+  ctx.lineCap = "round"; ctx.lineJoin = "round";
+  function frame(t) {
+    requestAnimationFrame(frame);
+    if (cv.width !== cv.clientWidth || cv.height !== cv.clientHeight) {
+      cv.width = cv.clientWidth; cv.height = cv.clientHeight;
+      fillParts();
+    }
+    var dt = Math.min(.05, (t - last) / 1000); last = t;
+    ctx.clearRect(0, 0, cv.width, cv.height);
+    parts.forEach(function (p) {
+      p.y -= p.v * dt; p.x += Math.sin(t / 900 + p.ph) * 8 * dt;
+      if (p.y < (p.rune ? -50 : -10)) spawn(p, false);
+      if (p.rune) {
+        var ra = (.2 + .2 * (.5 + .5 * Math.sin(t / 1300 + p.ph))) * Math.min(1, Math.max(0, p.y) / (cv.height * .3));
+        ctx.save();
+        ctx.translate(p.x, p.y); ctx.rotate(p.rot + t / 1000 * p.spin); ctx.scale(p.s, p.s); ctx.translate(-10, -14);
+        ctx.strokeStyle = "rgba(" + (p.c || accRGB) + "," + ra.toFixed(3) + ")"; ctx.lineWidth = 1.7 / p.s;
+        ctx.lineCap = "round"; ctx.lineJoin = "round";
+        ctx.stroke(p.g);
+        ctx.restore();
+        return;
+      }
+      var a = (.25 + .35 * (.5 + .5 * Math.sin(t / 400 + p.ph))) * Math.min(1, p.y / (cv.height * .35));
+      ctx.fillStyle = "rgba(" + (p.c || accRGB) + "," + Math.max(0, a).toFixed(3) + ")";
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 6.3); ctx.fill();
+    });
+  }
+  requestAnimationFrame(frame);
+})();
+function route() {
+  var views = { hours: "page-hours", wheel: "sec-wheel", readings: "sec-readings", write: "sec-write", quiz: "sec-quiz", games: "sec-games", seasons: "sec-seasons", dictionary: "sec-dictionary", lore: "sec-lore", yours: "sec-yours" };
+  var h = location.hash.replace("#", ""), inside = !!views[h];
+  document.getElementById("welcome").hidden = inside;
+  document.getElementById("site").hidden = !inside;
+  for (var v in views) document.getElementById(views[v]).hidden = v !== h;
+  document.getElementById("note").hidden = h !== "hours";
+  var GROUPS = { clock: [["hours", "The Hours"], ["seasons", "Moon and Seasons"]], cast: [["wheel", "Rune Wheel"], ["readings", "Readings"]],
+    learn: [["dictionary", "Dictionary"], ["lore", "Lore"], ["quiz", "Quiz"], ["games", "Games"]], yours: [["write", "Write in Runes"], ["yours", "Make It Yours"]] };
+  var gk = "";
+  for (var g in GROUPS) GROUPS[g].forEach(function (pg) { if (pg[0] === h) gk = g; });
+  var links = document.querySelectorAll("#groups a");
+  for (var i = 0; i < links.length; i++) {
+    if (links[i].getAttribute("data-group") === gk) links[i].setAttribute("aria-current", "true");
+    else links[i].removeAttribute("aria-current");
+  }
+  document.getElementById("subnav").innerHTML = gk ? GROUPS[gk].map(function (pg) {
+    return '<a href="#' + pg[0] + '"' + (pg[0] === h ? ' aria-current="page"' : "") + ">" + pg[1] + "</a>";
+  }).join("") : "";
+  window.scrollTo(0, 0);
+  if (!inside && typeof prefs === "object" && prefs) { carve(.9); carve(1.3); carve(1.7); introState(); }
+}
+window.addEventListener("hashchange", route);
+route();
+function say(id, text) { document.getElementById(id + "-msg").textContent = text; }
+function fill(id) {
+  var rows = editing[id] ? base[id] : hours[id], ul = document.getElementById(id), acts = document.getElementById(id + "-acts");
+  if (editing[id]) {
+    ul.innerHTML = rows.map(function (r, i) {
+      var p = id + "-" + i, n = "Row " + (i + 1);
+      return '<li class="edit">' +
+        '<input type="time" id="' + p + '-s" aria-label="' + n + ' start time" value="' + r[0] + '">' +
+        '<input type="time" id="' + p + '-e" aria-label="' + n + ' end time" value="' + r[1] + '">' +
+        '<select id="' + p + '-r" aria-label="' + n + ' rune">' + names.map(function (nm) {
+          return "<option" + (nm === r[2] ? " selected" : "") + ">" + nm + "</option>";
+        }).join("") + "</select></li>";
+    }).join("");
+    acts.innerHTML = '<button type="button" class="main" data-act="save" data-id="' + id + '">Save</button>' +
+      '<button type="button" data-act="cancel" data-id="' + id + '">Cancel</button>' +
+      '<button type="button" data-act="reset" data-id="' + id + '">Reset to the board</button>';
+  } else {
+    ul.innerHTML = rows.map(function (r) {
+      return "<li" + (r[2] === curName ? ' class="now"' : "") + '><span class="time">' + fmt(r[0]) + " – " + fmt(r[1]) +
+        "</span>" + glyph(r[2], "carved") + '<span class="rname">' + r[2] + "</span></li>";
+    }).join("");
+    acts.innerHTML = canWrite ? '<button type="button" data-act="edit" data-id="' + id + '">Change these runes</button>' : "";
+  }
+}
+function renderAll() {
+  cur = current();
+  curName = cur ? cur.row[2] : "";
+  var spans = document.getElementById("band").children;
+  for (var i = 0; i < spans.length; i++) spans[i].classList.toggle("lit", dict[i][0] === curName);
+  var key = cur ? cur.row.join() : "";
+  drawDial();
+  if (key !== heroKey) {
+    heroKey = key; drawHero();
+    document.getElementById("w-core").innerHTML = cur ? glyph(curName, "draw", 1900) : "";
+    document.getElementById("w-now").innerHTML = cur
+      ? "It is the hour of <b>" + curName + "</b> · " + fmt(cur.row[0]) + " – " + fmt(cur.row[1]) : "";
+  }
+  if (!editing.night) fill("night");
+  if (!editing.day) fill("day");
+  drawBirth();
+  drawTimeline();
+  var sn = document.getElementById("sun-note");
+  sn.textContent = sunInfo; sn.hidden = !sunInfo;
+}
+
+// saving: the artifact's own store when it is there, this browser otherwise
+function toDoc(rows) { return rows.map(function (r) { return { s: r[0], e: r[1], r: r[2] }; }); }
+function fromDoc(a) {
+  if (!Array.isArray(a) || !a.length) return null;
+  var out = [], t = /^\d\d:\d\d$/;
+  for (var i = 0; i < a.length; i++) {
+    var x = a[i];
+    if (!x || !t.test(x.s) || !t.test(x.e) || !P[x.r]) return null;
+    out.push([x.s, x.e, x.r]);
+  }
+  return out;
+}
+function apply(body) {
+  var n = fromDoc(body && body.night), d = fromDoc(body && body.day);
+  if (!n || !d) return;
+  if (JSON.stringify([n, d]) === JSON.stringify([base.night, base.day])) return;
+  base = { night: n, day: d };
+  recompute();
+  renderAll();
+}
+var saving = Promise.resolve();
+function persist(id) {
+  var body = { night: toDoc(base.night), day: toDoc(base.day) };
+  if (store) {
+    say(id, "Saving…");
+    saving = saving.then(function () { return store.set(body); }).then(
+      function () { say(id, "Saved."); },
+      function () { say(id, "Couldn't save your changes. Open the editor and save again."); });
+  } else {
+    try { localStorage.setItem("rune-hours", JSON.stringify(body)); say(id, "Saved in this browser only."); }
+    catch (e) { say(id, "Couldn't save. Your changes last until you close the page."); }
+  }
+}
+document.addEventListener("click", function (ev) {
+  var b = ev.target.closest ? ev.target.closest("[data-act]") : null;
+  if (!b) return;
+  var id = b.getAttribute("data-id"), act = b.getAttribute("data-act");
+  if (act === "edit") { editing[id] = true; say(id, ""); fill(id); }
+  else if (act === "cancel") { editing[id] = false; say(id, ""); fill(id); }
+  else if (act === "reset") { base[id] = clone(DEF[id]); recompute(); editing[id] = false; renderAll(); persist(id); }
+  else if (act === "save") {
+    var rows = [];
+    for (var i = 0; i < base[id].length; i++) {
+      var s = document.getElementById(id + "-" + i + "-s").value.slice(0, 5),
+          e = document.getElementById(id + "-" + i + "-e").value.slice(0, 5);
+      if (!s || !e) { say(id, "Give every row a start time and an end time."); return; }
+      rows.push([s, e, document.getElementById(id + "-" + i + "-r").value]);
+    }
+    base[id] = rows; recompute(); editing[id] = false; renderAll(); persist(id);
+  }
+});
+// ---------- preferences, colour, sound, sun ----------
+var prefs = { name: "", theme: "ochre", skip: false, nightCol: "", dayCol: "", best: 0, sound: false, alarm: false, sun: { on: false, place: "", lat: "", lon: "" }, miss: {} };
+var pStore = null, pSaving = Promise.resolve(), pTimer = 0, accRGB = "224,73,47", sunInfo = "";
+var THEMES = { ochre: ["Red ochre", "224 73 47"], glacier: ["Glacier", "70 205 200"], moss: ["Moss", "128 186 96"], heather: ["Heather", "178 136 240"] };
+function mergePrefs(o) {
+  if (!o || typeof o !== "object") return;
+  if (typeof o.name === "string") prefs.name = o.name.slice(0, 30);
+  if (THEMES[o.theme]) prefs.theme = o.theme;
+  var hex = /^#[0-9a-f]{6}$/i;
+  if ("skip" in o) prefs.skip = !!o.skip;
+  if ("nightCol" in o) prefs.nightCol = hex.test(o.nightCol) ? o.nightCol : "";
+  if ("dayCol" in o) prefs.dayCol = hex.test(o.dayCol) ? o.dayCol : "";
+  if (o.best > 0) prefs.best = Math.min(999, Math.floor(o.best));
+  if ("sound" in o) prefs.sound = !!o.sound;
+  if ("alarm" in o) prefs.alarm = !!o.alarm;
+  if (o.sun && typeof o.sun === "object") prefs.sun = { on: !!o.sun.on, place: String(o.sun.place || "").slice(0, 40),
+    lat: String(o.sun.lat || "").slice(0, 12), lon: String(o.sun.lon || "").slice(0, 12) };
+  if (o.miss && typeof o.miss === "object") {
+    prefs.miss = {};
+    for (var k in o.miss) if (P[k] && o.miss[k] > 0) prefs.miss[k] = Math.min(9, Math.floor(o.miss[k]));
+  }
+}
+try { mergePrefs(JSON.parse(localStorage.getItem("rune-prefs") || "null")); } catch (e) {}
+function savePrefs() {
+  try { localStorage.setItem("rune-prefs", JSON.stringify(prefs)); } catch (e) {}
+  if (!pStore) return;
+  clearTimeout(pTimer);
+  pTimer = setTimeout(function () {
+    var body = clone(prefs);
+    pSaving = pSaving.then(function () { return pStore.set(body); }).then(null, function () {});
+  }, 800);
+}
+function applyTheme() {
+  var t = THEMES[prefs.theme] || THEMES.ochre;
+  document.documentElement.style.setProperty("--acc", t[1]);
+  accRGB = t[1].replace(/ /g, ",");
+  var st = document.documentElement.style;
+  if (prefs.nightCol) st.setProperty("--moon", prefs.nightCol); else st.removeProperty("--moon");
+  if (prefs.dayCol) st.setProperty("--sun", prefs.dayCol); else st.removeProperty("--sun");
+}
+applyTheme();
+
+var audio = { ctx: null, wind: null };
+function audioStart() {
+  var AC = window.AudioContext || window.webkitAudioContext;
+  if (!AC) return false;
+  try {
+    if (!audio.ctx) audio.ctx = new AC();
+    if (audio.ctx.state === "suspended") audio.ctx.resume();
+  } catch (e) { return false; }
+  return true;
+}
+function windSet() {
+  var want = prefs.sound && audio.ctx;
+  if (want && !audio.wind) {
+    var c = audio.ctx, b = c.createBuffer(1, c.sampleRate * 4, c.sampleRate), d = b.getChannelData(0), last = 0;
+    for (var i = 0; i < d.length; i++) { last = (last + .02 * (Math.random() * 2 - 1)) / 1.02; d[i] = last * 3.5; }
+    var src = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain(), lfo = c.createOscillator(), lg = c.createGain();
+    src.buffer = b; src.loop = true; f.type = "lowpass"; f.frequency.value = 420;
+    g.gain.value = .2; lfo.frequency.value = .09; lg.gain.value = .11;
+    lfo.connect(lg); lg.connect(g.gain); src.connect(f); f.connect(g); g.connect(c.destination);
+    src.start(); lfo.start();
+    audio.wind = { src: src, lfo: lfo, g: g };
+  } else if (!want && audio.wind) {
+    try { audio.wind.src.stop(); audio.wind.lfo.stop(); } catch (e) {}
+    audio.wind.g.disconnect(); audio.wind = null;
+  }
+}
+function carve(delay) {
+  if (!prefs.sound || !audio.ctx || audio.ctx.state !== "running") return;
+  var c = audio.ctx, t = c.currentTime + (delay || 0), src = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain();
+  var b = c.createBuffer(1, Math.floor(c.sampleRate * .3), c.sampleRate), d = b.getChannelData(0);
+  for (var i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+  src.buffer = b; f.type = "bandpass"; f.Q.value = 1.2;
+  f.frequency.setValueAtTime(1700, t); f.frequency.linearRampToValueAtTime(3300, t + .25);
+  g.gain.setValueAtTime(.0001, t); g.gain.linearRampToValueAtTime(.11, t + .03); g.gain.exponentialRampToValueAtTime(.001, t + .28);
+  src.connect(f); f.connect(g); g.connect(c.destination); src.start(t); src.stop(t + .3);
+}
+function chime() {
+  if (!audio.ctx || audio.ctx.state !== "running") return;
+  [392, 587.33, 783.99].forEach(function (hz, i) {
+    var c = audio.ctx, t = c.currentTime + i * .22, o = c.createOscillator(), g = c.createGain();
+    o.type = "sine"; o.frequency.value = hz;
+    g.gain.setValueAtTime(.0001, t); g.gain.linearRampToValueAtTime(.2, t + .02); g.gain.exponentialRampToValueAtTime(.001, t + 1.6);
+    o.connect(g); g.connect(c.destination); o.start(t); o.stop(t + 1.7);
+  });
+}
+document.addEventListener("click", function () {
+  if ((prefs.sound || prefs.alarm) && audioStart()) windSet();
+});
+var toastTimer = 0;
+function toast(text) {
+  var el = document.getElementById("toast");
+  el.textContent = text; el.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function () { el.classList.remove("show"); }, 6000);
+}
+function alarmGo(name) {
+  var fl = document.getElementById("alarm-flash");
+  fl.classList.remove("go"); void fl.offsetWidth; fl.classList.add("go");
+  toast("The hour of " + name + " begins.");
+  chime();
+}
+
+var PLACES = { "Amsterdam": [52.37, 4.9], "Athens": [37.98, 23.73], "Auckland": [-36.85, 174.76], "Beijing": [39.9, 116.41],
+  "Belfast": [54.6, -5.93], "Berlin": [52.52, 13.4], "Buenos Aires": [-34.6, -58.38], "Cairo": [30.04, 31.24],
+  "Cape Town": [-33.92, 18.42], "Cardiff": [51.48, -3.18], "Chicago": [41.88, -87.63], "Copenhagen": [55.68, 12.57],
+  "Delhi": [28.61, 77.21], "Denver": [39.74, -104.99], "Dubai": [25.2, 55.27], "Dublin": [53.35, -6.26],
+  "Edinburgh": [55.95, -3.19], "Helsinki": [60.17, 24.94], "Hong Kong": [22.32, 114.17], "Honolulu": [21.31, -157.86],
+  "Istanbul": [41.01, 28.98], "Lagos": [6.52, 3.38], "London": [51.51, -0.13], "Los Angeles": [34.05, -118.24],
+  "Madrid": [40.42, -3.7], "Mexico City": [19.43, -99.13], "Mumbai": [19.08, 72.88], "Nairobi": [-1.29, 36.82],
+  "New York": [40.71, -74.01], "Oslo": [59.91, 10.75], "Paris": [48.86, 2.35], "Reykjavik": [64.15, -21.94],
+  "Rome": [41.9, 12.5], "Sao Paulo": [-23.55, -46.63], "Seoul": [37.57, 126.98], "Singapore": [1.35, 103.82],
+  "Stockholm": [59.33, 18.07], "Sydney": [-33.87, 151.21], "Tokyo": [35.68, 139.69], "Toronto": [43.65, -79.38] };
+function sunTimes(lat, lon, when) {
+  var rad = Math.PI / 180, d = when ? new Date(when) : new Date();
+  d.setHours(12, 0, 0, 0);
+  var n = Math.round(d.getTime() / 86400000 + 2440587.5 - 2451545 + lon / 360);
+  var js = n - lon / 360, M = (357.5291 + .98560028 * js) % 360, Mr = M * rad;
+  var C = 1.9148 * Math.sin(Mr) + .02 * Math.sin(2 * Mr) + .0003 * Math.sin(3 * Mr);
+  var L = ((M + C + 180 + 102.9372) % 360) * rad;
+  var tr = 2451545 + js + .0053 * Math.sin(Mr) - .0069 * Math.sin(2 * L);
+  var sd = Math.sin(L) * Math.sin(23.4397 * rad), cd = Math.cos(Math.asin(sd));
+  var cw = (Math.sin(-.833 * rad) - Math.sin(lat * rad) * sd) / (Math.cos(lat * rad) * cd);
+  if (cw < -1 || cw > 1) return null;
+  var w = Math.acos(cw) / rad / 360;
+  function lm(j) { var x = new Date((j - 2440587.5) * 86400000); return x.getHours() * 60 + x.getMinutes(); }
+  return { rise: lm(tr - w), set: lm(tr + w) };
+}
+function sunPlace() {
+  var s = prefs.sun;
+  if (PLACES[s.place]) return PLACES[s.place];
+  var la = parseFloat(s.lat), lo = parseFloat(s.lon);
+  if (s.place === "other" && la >= -90 && la <= 90 && lo >= -180 && lo <= 180) return [la, lo];
+  return null;
+}
+function hm(m) {
+  m = ((Math.round(m) % 1440) + 1440) % 1440;
+  return (m < 600 ? "0" : "") + Math.floor(m / 60) + ":" + (m % 60 < 10 ? "0" : "") + m % 60;
+}
+function recompute() {
+  hours = base; sunInfo = "";
+  if (!prefs.sun.on) return;
+  var pl = sunPlace();
+  if (!pl) { sunInfo = "Sunrise and sunset mode is on, but no place is chosen yet. Choose one on the Make It Yours page."; return; }
+  var st = sunTimes(pl[0], pl[1]);
+  var dayLen = st ? ((st.set - st.rise) % 1440 + 1440) % 1440 : 0;
+  if (!st || dayLen < 30 || dayLen > 1410) { sunInfo = "The sun doesn't both rise and set there today, so the times from your tables are shown."; return; }
+  function spread(rows, start, len) {
+    return rows.map(function (r, i) { return [hm(start + len * i / rows.length), hm(start + len * (i + 1) / rows.length), r[2]]; });
+  }
+  hours = { night: spread(base.night, st.set, 1440 - dayLen), day: spread(base.day, st.rise, dayLen) };
+  sunInfo = "The times follow the sun" + (PLACES[prefs.sun.place] ? " in " + prefs.sun.place : "") + " today: sunrise " +
+    fmt(hm(st.rise)) + ", sunset " + fmt(hm(st.set)) + ", shown in your device's time.";
+}
+recompute();
+
+var POEM = {
+  Fehu: "Wealth is a comfort to everyone, but it should be shared freely by anyone who wants to be well thought of.",
+  Uruz: "The aurochs is proud and fierce, with huge horns that it fights with, a bold creature of the moors.",
+  Thurisaz: "The thorn is terribly sharp, painful to anyone who touches it and cruel to anyone who lies down among them.",
+  Ansuz: "The mouth is where all speech begins. It holds up wisdom and brings comfort to the wise.",
+  Raidho: "Riding seems easy to the warrior sitting in the hall, and very hard to the one on a strong horse on the long roads.",
+  Kenaz: "Everyone knows the torch by its pale, bright flame. It burns most often where nobles are resting indoors.",
+  Gebo: "Giving brings honour and praise to the giver, and for those who have nothing else it is help and a living.",
+  Wunjo: "Joy belongs to the one who knows little of trouble, pain or sorrow, and who has plenty and a good enough home.",
+  Hagalaz: "Hail is the whitest of grains. It whirls down from the sky, is tossed about by the wind and then turns to water.",
+  Nauthiz: "Need lies tight across the chest, yet it often becomes a help and a rescue for people who heed it early enough.",
+  Isa: "Ice is very cold and very slippery. It glitters like glass or jewels, a floor made by frost and lovely to look at.",
+  Jera: "The harvest is a joy to everyone, when the earth is allowed to give its bright fruits to rich and poor alike.",
+  Eihwaz: "The yew has rough bark and stands hard and firm in the ground, held up by its roots, a keeper of fire and a joy on the land.",
+  Perthro: "It always means play and laughter where warriors sit together cheerfully in the beer hall.",
+  Algiz: "Elk-sedge grows mostly in the fen, in the water. It wounds harshly and draws blood from anyone who takes hold of it.",
+  Sowilo: "The sun is always a hope to seafarers as they cross the open water, until their ship brings them to land.",
+  Tiwaz: "It is a guiding sign that keeps faith with nobles. It holds its course above the mists of night and never fails.",
+  Berkano: "The birch bears no fruit, yet it sends out shoots without seed. Its branches are beautiful and its crown reaches the sky.",
+  Ehwaz: "The horse is a joy to nobles, proud on its hooves while riders talk it over, and always a comfort to the restless.",
+  Mannaz: "A person in good spirits is dear to their kin, yet each must one day fail the others, since the body returns to the earth.",
+  Laguz: "The sea seems endless to those who set out in an unsteady ship, when the waves terrify them and the ship will not be steered.",
+  Ingwaz: "Ing was first seen among the East Danes, until he went away again over the waves with his wagon following behind.",
+  Dagaz: "Day is a messenger and is dear to everyone, a glorious light that brings joy and hope to rich and poor and is of use to all.",
+  Othala: "A family home is very dear to everyone, if they can enjoy there what is right and proper, in lasting plenty."
+};
+
+// ---------- countdown, birth hour, daily rune, reading, journal, translator, quiz ----------
+function esc(s) {
+  return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; });
+}
+function rowAt(m) {
+  var all = hours.night.concat(hours.day);
+  for (var j = 0; j < all.length; j++) if (isNow(all[j], m)) return all[j];
+  return null;
+}
+function dur(s) {
+  var h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), x = s % 60;
+  return (h ? h + " h " : "") + m + " min " + (x < 10 ? "0" : "") + x + " s";
+}
+var dayStamp = new Date().toDateString();
+function tick() {
+  var c = current(), key = c ? c.row.join() : "";
+  var stamp = new Date().toDateString();
+  if (stamp !== dayStamp) { dayStamp = stamp; newDay(); recompute(); c = current(); key = c ? c.row.join() : ""; }
+  if (key !== heroKey) { renderAll(); if (prefs.alarm && cur) alarmGo(cur.row[2]); }
+  placeNow();
+  var t = new Date(), nowS = t.getHours() * 3600 + t.getMinutes() * 60 + t.getSeconds();
+  document.getElementById("hand").setAttribute("transform", "rotate(" + nowS / 240 + " 100 100)");
+  var el = document.getElementById("countdown");
+  if (!el || !cur) return;
+  var left = ((mins(cur.row[1]) * 60 - nowS) % 86400 + 86400) % 86400, nx = rowAt(mins(cur.row[1]));
+  el.textContent = (nx && nx !== cur.row ? nx[2] + " comes next in " : "This hour ends in ") + dur(left);
+}
+function big(name, head, sub) {
+  var d = dict[dictIndex(name)];
+  return '<div class="big"><div class="stone">' + glyph(name) + '</div><div class="entry"><span class="tag top">' + head +
+    "</span><b>" + name + "</b>" + (sub ? '<span class="lit">' + sub + "</span>" : "") +
+    '<span class="lit">' + d[2] + '</span><span class="idea">' + d[3] + "</span></div></div>";
+}
+
+// birth hour
+var birthIn = document.getElementById("birth");
+try { birthIn.value = localStorage.getItem("rune-birth") || ""; } catch (e) {}
+function drawBirth() {
+  var out = document.getElementById("birth-out"), v = birthIn.value.slice(0, 5);
+  if (!v) { out.innerHTML = '<p class="msg">Pick a time to see its rune.</p>'; return; }
+  var r = rowAt(mins(v));
+  out.innerHTML = r ? big(r[2], "Born in the hour of", fmt(r[0]) + " – " + fmt(r[1]))
+    : '<p class="msg">No rune covers ' + fmt(v) + " on your tables.</p>";
+}
+birthIn.oninput = function () {
+  try { localStorage.setItem("rune-birth", birthIn.value); } catch (e) {}
+  drawBirth();
+};
+
+// journal
+var entries = [], jStore = null, jSaving = Promise.resolve(), jLoaded = false, jUnsaved = false;
+function jWhere(text) { document.getElementById("journal-where").textContent = text; }
+function cleanEntries(a) {
+  var out = [];
+  if (!Array.isArray(a)) return out;
+  for (var i = 0; i < a.length && out.length < 200; i++) {
+    var x = a[i];
+    if (!x || typeof x.t !== "string" || !Array.isArray(x.runes)) continue;
+    out.push({ t: x.t, kind: String(x.kind || "").slice(0, 40),
+      runes: x.runes.filter(function (n) { return typeof n === "string" && P[n]; }).slice(0, 9),
+      note: String(x.note || "").slice(0, 300) });
+  }
+  return out;
+}
+function drawJournal() {
+  var sel = document.getElementById("j-rune");
+  if (!sel.options.length) sel.innerHTML = '<option value="">All runes</option>' + names.map(function (n) { return "<option>" + n + "</option>"; }).join("");
+  var q = document.getElementById("j-search").value.trim().toLowerCase(), want = sel.value, counts = {}, html = "", shown = 0;
+  entries.forEach(function (x, i) {
+    x.runes.forEach(function (n) { counts[n] = (counts[n] || 0) + 1; });
+    if (want && x.runes.indexOf(want) < 0) return;
+    if (q && (x.kind + " " + x.note + " " + x.runes.join(" ")).toLowerCase().indexOf(q) < 0) return;
+    shown++;
+    var d = new Date(x.t), when = isNaN(d) ? "" : d.toLocaleString([], { dateStyle: "medium", timeStyle: "short" });
+    html += '<li><div><span class="when">' + esc(when) + " · " + esc(x.kind) + '</span><div class="runes">' +
+      x.runes.map(function (n) { return "<span>" + glyph(n) + n + "</span>"; }).join("") + "</div>" +
+      (x.note ? '<p class="jnote">' + esc(x.note) + "</p>" : "") + "</div>" +
+      '<button type="button" data-jdel="' + i + '" aria-label="Delete this entry">Delete</button></li>';
+  });
+  if (!entries.length) html = '<li><p class="jnote">Nothing saved yet. Draw a reading or cast the wheel, then save it here.</p></li>';
+  else if (!shown) html = '<li><p class="jnote">No entries match that search.</p></li>';
+  document.getElementById("journal").innerHTML = html;
+  var top = Object.keys(counts).sort(function (a, b) { return counts[b] - counts[a]; }).slice(0, 5);
+  document.getElementById("j-stats").textContent = entries.length ? entries.length + (entries.length === 1 ? " entry. " : " entries. ") +
+    "Drawn most often: " + top.map(function (n) { return n + " ×" + counts[n]; }).join(", ") + "." : "";
+}
+function persistJournal() {
+  if (!jLoaded) { jUnsaved = true; return; }
+  if (jStore) {
+    var body = { entries: clone(entries) };
+    jSaving = jSaving.then(function () { return jStore.set(body); }).then(null, function () {
+      jWhere("Couldn't save your journal just now. Your next change will try again.");
+    });
+  } else {
+    try { localStorage.setItem("rune-journal", JSON.stringify(entries)); }
+    catch (e) { jWhere("Couldn't save. The journal lasts until you close the page."); }
+  }
+}
+function journalLoaded(a) {
+  if (jLoaded) return;
+  jLoaded = true;
+  entries = entries.concat(cleanEntries(a)).slice(0, 200);
+  jWhere(jStore ? "Saved with this page, newest first. Only you can see your journal."
+    : "Saved in this browser only, newest first.");
+  drawJournal();
+  if (jUnsaved) { jUnsaved = false; persistJournal(); }
+}
+function localJournal() {
+  var a = [];
+  try { a = JSON.parse(localStorage.getItem("rune-journal") || "[]"); } catch (e) {}
+  journalLoaded(a);
+}
+function addEntry(kind, runes, note) {
+  entries.unshift({ t: new Date().toISOString(), kind: kind, runes: runes, note: String(note || "").trim().slice(0, 300) });
+  entries = entries.slice(0, 200);
+  drawJournal();
+  persistJournal();
+}
+document.getElementById("journal").onclick = function (ev) {
+  var b = ev.target.closest ? ev.target.closest("[data-jdel]") : null;
+  if (!b) return;
+  entries.splice(+b.getAttribute("data-jdel"), 1);
+  drawJournal();
+  persistJournal();
+};
+drawJournal();
+
+// readings in three layouts
+var LAYOUTS = {
+  three: { name: "Three-rune reading", cls: "l3", spots: ["Past", "Present", "Future"] },
+  cross: { name: "Five-rune cross", cls: "l5", spots: ["Present", "Past", "Future", "Root of the matter", "What may help"] },
+  nine: { name: "Nine-rune cast", cls: "l9", spots: ["Past", "Past", "Past", "Present", "Present", "Present", "Future", "Future", "Future"] }
+};
+var reading = null, readingSaved = false;
+function drawReading() {
+  var key = reading ? reading.layout : document.getElementById("read-layout").value, L = LAYOUTS[key] || LAYOUTS.three;
+  var box = document.getElementById("stones");
+  box.className = "stones " + L.cls;
+  box.innerHTML = L.spots.map(function (label, k) {
+    var r = reading ? dict[reading.runes[k]] : null;
+    return '<figure><div class="stone">' + (r ? glyph(r[0], "draw", k * 220) : "") + '</div><figcaption class="entry">' +
+      '<span class="tag top">' + label + "</span>" +
+      (r ? "<b>" + r[0] + '</b><span class="idea">' + (L.spots.length > 5 ? r[2] : r[2] + ". " + r[3] + ".") + "</span>"
+         : '<span class="idea">Not drawn yet</span>') + "</figcaption></figure>";
+  }).join("");
+  document.getElementById("read-save").hidden = !reading;
+  document.getElementById("read-draw").textContent = "Draw " + { 3: "three", 5: "five", 9: "nine" }[L.spots.length] + " runes";
+}
+document.getElementById("read-layout").onchange = function () {
+  reading = null; document.getElementById("read-msg").textContent = ""; drawReading();
+};
+document.getElementById("read-draw").onclick = function () {
+  var key = document.getElementById("read-layout").value, L = LAYOUTS[key] || LAYOUTS.three;
+  var pool = dict.map(function (_, i) { return i; }), out = [];
+  while (out.length < L.spots.length) out.push(pool.splice(Math.floor(Math.random() * pool.length), 1)[0]);
+  reading = { layout: LAYOUTS[key] ? key : "three", runes: out }; readingSaved = false;
+  document.getElementById("read-msg").textContent = "";
+  drawReading();
+};
+document.getElementById("read-keep").onclick = function () {
+  var msg = document.getElementById("read-msg"), note = document.getElementById("read-note");
+  if (!reading) return;
+  if (readingSaved) { msg.textContent = "This reading is already in your journal."; return; }
+  addEntry(LAYOUTS[reading.layout].name, reading.runes.map(function (i) { return dict[i][0]; }), note.value);
+  readingSaved = true;
+  msg.textContent = "Saved to your journal.";
+};
+document.getElementById("read-card").onclick = function () {
+  if (!reading) return;
+  var L = LAYOUTS[reading.layout];
+  showCard(L.name, document.getElementById("read-note").value, reading.runes.map(function (i, k) { return { name: dict[i][0], label: L.spots[k] }; }));
+};
+drawReading();
+document.getElementById("wheel-save").onclick = function () {
+  addEntry("Wheel cast", [0, 1, 2].map(function (k) { return dict[k * 8 + sel[k]][0]; }), "");
+  document.getElementById("hourmsg").textContent = "Saved to your journal. You can find it on the Readings page.";
+};
+
+// write in runes
+var MAP = { a: "Ansuz", b: "Berkano", c: "Kenaz", d: "Dagaz", e: "Ehwaz", f: "Fehu", g: "Gebo", h: "Hagalaz", i: "Isa",
+  j: "Jera", k: "Kenaz", l: "Laguz", m: "Mannaz", n: "Nauthiz", o: "Othala", p: "Perthro", q: "Kenaz", r: "Raidho",
+  s: "Sowilo", t: "Tiwaz", u: "Uruz", v: "Uruz", w: "Wunjo", y: "Jera", z: "Algiz" };
+var writeIn = document.getElementById("write-in");
+function drawWrite() {
+  var s = writeIn.value.toLowerCase(), html = "", words = [], word = [], gap = false;
+  for (var i = 0; i < s.length; i++) {
+    var two = s.substr(i, 2), ch = s.charAt(i), list = null, label = ch;
+    if (two === "th") { list = ["Thurisaz"]; label = "th"; i++; }
+    else if (two === "ng") { list = ["Ingwaz"]; label = "ng"; i++; }
+    else if (ch === "x") list = ["Kenaz", "Sowilo"];
+    else if (MAP[ch]) list = [MAP[ch]];
+    else { if (/\s/.test(ch) && word.length) gap = true; continue; }
+    if (gap) { html += '<span class="sep" aria-hidden="true">·</span>'; words.push(word.join(" ")); word = []; gap = false; }
+    for (var k = 0; k < list.length; k++) {
+      html += '<span class="ch" title="' + list[k] + '">' + glyph(list[k]) + "<small>" + (k === 0 ? label : "&nbsp;") + "</small></span>";
+      word.push(list[k]);
+    }
+  }
+  if (word.length) words.push(word.join(" "));
+  document.getElementById("write-out").innerHTML = html || '<span class="msg" style="margin:0">Type a word above to see it in runes.</span>';
+  document.getElementById("write-names").textContent = words.join("  ·  ");
+}
+writeIn.oninput = drawWrite;
+drawWrite();
+
+// quiz
+var quiz = { right: 0, asked: 0, q: null };
+function newQ() {
+  var i;
+  do { i = pickWeighted(); } while (quiz.q && i === quiz.q.i);
+  var opts = [i];
+  var pl = quizPool();
+  while (opts.length < 4) { var j = pl[Math.floor(Math.random() * pl.length)]; if (opts.indexOf(j) < 0) opts.push(j); }
+  for (var a = opts.length - 1; a > 0; a--) { var b = Math.floor(Math.random() * (a + 1)), tmp = opts[a]; opts[a] = opts[b]; opts[b] = tmp; }
+  quiz.q = { i: i, mode: Math.random() < .5 ? 0 : 2, opts: opts, pick: -1 };
+  drawQuiz();
+}
+function drawQuiz() {
+  var q = quiz.q, done = q.pick >= 0, r = dict[q.i];
+  var html = '<div class="q-top"><div class="stone">' + glyph(r[0]) + '</div><div><p class="q-ask">' +
+    (q.mode === 0 ? "Which rune is this?" : "What does this rune's name mean?") +
+    '</p><p class="msg" style="margin:0">Score: ' + quiz.right + " of " + quiz.asked + '</p></div></div><div class="choices">' +
+    q.opts.map(function (j) {
+      var cls = done ? (j === q.i ? "right" : j === q.pick ? "wrong" : "") : "";
+      return '<button type="button" data-q="' + j + '" class="' + cls + '"' + (done ? " disabled" : "") + ">" + dict[j][q.mode] + "</button>";
+    }).join("") + "</div>";
+  if (done) html += '<p class="q-fb" role="status">' + (q.pick === q.i ? "Correct." : "Not quite.") + " This is <b>" + r[0] +
+    "</b>. Its name means: " + r[2] + '.</p><div class="acts"><button type="button" class="main" id="quiz-next">Next rune</button></div>';
+  document.getElementById("quiz").innerHTML = html;
+}
+document.getElementById("quiz").onclick = function (ev) {
+  var b = ev.target.closest ? ev.target.closest("button") : null;
+  if (!b) return;
+  if (b.id === "quiz-next") { newQ(); return; }
+  if (quiz.q.pick >= 0 || b.getAttribute("data-q") === null) return;
+  quiz.q.pick = +b.getAttribute("data-q");
+  quiz.asked++;
+  if (quiz.q.pick === quiz.q.i) quiz.right++;
+  quizMark(quiz.q.i, quiz.q.pick === quiz.q.i);
+  drawQuiz();
+  if (quiz.timed) {
+    if (quiz.q.pick === quiz.q.i) quiz.timed.right++;
+    showTimer();
+    setTimeout(function () { if (quiz.timed) newQ(); }, 450);
+  } else document.getElementById("quiz-next").focus();
+};
+newQ();
+
+// ---------- timeline, yes or no, bind runes, memory, tracing, lore, make it yours ----------
+function drawTimeline() {
+  var html = "", key = cur ? cur.row.join() : "";
+  [["night", "n"], ["day", "d"]].forEach(function (pair) {
+    hours[pair[0]].forEach(function (r) {
+      var s = mins(r[0]), len = ((mins(r[1]) - s) % 1440 + 1440) % 1440;
+      var pieces = s + len > 1440 ? [[s, 1440 - s], [0, s + len - 1440]] : [[s, len]];
+      pieces.forEach(function (pc) {
+        if (pc[1] <= 0) return;
+        html += '<div class="seg ' + pair[1] + (r.join() === key ? " now" : "") + '" style="left:' + pc[0] / 14.4 + "%;width:" +
+          pc[1] / 14.4 + '%" title="' + r[2] + " " + fmt(r[0]) + " – " + fmt(r[1]) + '">' + (pc[1] >= 25 ? glyph(r[2]) : "") + "</div>";
+      });
+    });
+  });
+  document.getElementById("tl").innerHTML = html + '<div id="tl-now"></div>';
+  placeNow();
+}
+function placeNow() {
+  var t = new Date(), el = document.getElementById("tl-now");
+  if (el) el.style.left = (t.getHours() * 3600 + t.getMinutes() * 60 + t.getSeconds()) / 864 + "%";
+}
+
+// yes or no stone
+var YN = { Thurisaz: "No", Hagalaz: "No", Nauthiz: "No", Isa: "No", Eihwaz: "Not yet", Perthro: "Not yet", Algiz: "Not yet", Laguz: "Not yet" };
+var ynLast = null;
+document.getElementById("yn-pull").onclick = function () {
+  var r = dict[Math.floor(Math.random() * 24)], ans = YN[r[0]] || "Yes";
+  ynLast = { name: r[0], ans: ans, saved: false };
+  document.getElementById("yn-out").innerHTML = '<div class="big" style="margin-bottom:12px"><div class="stone">' + glyph(r[0], "draw", 100) +
+    '</div><div class="entry"><span class="yn">' + ans + "</span><b>" + r[0] + '</b><span class="idea">' + r[2] + ". " + r[3] + ".</span></div></div>";
+  document.getElementById("yn-keep").hidden = false;
+  document.getElementById("yn-msg").textContent = "";
+  carve(.1);
+};
+document.getElementById("yn-keep").onclick = function () {
+  var msg = document.getElementById("yn-msg");
+  if (!ynLast) return;
+  if (ynLast.saved) { msg.textContent = "This answer is already in your journal."; return; }
+  addEntry("Yes or no: " + ynLast.ans, [ynLast.name], document.getElementById("yn-q").value);
+  ynLast.saved = true;
+  msg.textContent = "Saved to your journal.";
+};
+
+// bind runes: lay the chosen runes over each other, single-stave runes moved onto a shared upright
+var SHIFT = { Fehu: 4, Thurisaz: 4, Ansuz: 4, Raidho: 4, Wunjo: 4, Berkano: 4, Perthro: 5, Laguz: 3 };
+["bind-a", "bind-b", "bind-c"].forEach(function (id, k) {
+  var el = document.getElementById(id), pick = ["Tiwaz", "Fehu", ""][k];
+  el.innerHTML = (k === 2 ? '<option value="">None</option>' : "") + names.map(function (n) {
+    return "<option" + (n === pick ? " selected" : "") + ">" + n + "</option>";
+  }).join("");
+  el.onchange = drawBind;
+});
+function bindNames() {
+  var out = [];
+  ["bind-a", "bind-b", "bind-c"].forEach(function (id) {
+    var v = document.getElementById(id).value;
+    if (v && out.indexOf(v) < 0) out.push(v);
+  });
+  return out;
+}
+function drawBind() {
+  var list = bindNames(), firsts = [];
+  var svg = '<svg class="g" viewBox="-2 0 24 28" role="img" aria-label="Bind rune of ' + list.join(", ") + '">' + list.map(function (n) {
+    return '<path transform="translate(' + (SHIFT[n] || 0) + ' 0)" d="' + P[n] + '"/>';
+  }).join("") + "</svg>";
+  var parts = list.map(function (n) {
+    var d = dict[dictIndex(n)];
+    firsts.push(d[3].split(",")[0].toLowerCase());
+    return '<p class="part"><b>' + n + ":</b> " + d[3] + ".</p>";
+  }).join("");
+  var sum = firsts.length > 1 ? firsts.slice(0, -1).join(", ") + " and " + firsts[firsts.length - 1] : firsts[0];
+  document.getElementById("bind-out").innerHTML = '<div class="stone">' + svg + "</div><div>" + parts +
+    '<p class="sum">Together: a sign for ' + sum + ".</p></div>";
+  document.getElementById("bind-msg").textContent = "";
+}
+drawBind();
+document.getElementById("bind-keep").onclick = function () {
+  addEntry("Bind rune", bindNames(), "");
+  document.getElementById("bind-msg").textContent = "Saved to your journal.";
+};
+
+// memory
+var mem = { tiles: [], open: [], moves: 0, found: 0, lock: false };
+function shuffle(a) {
+  for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; }
+  return a;
+}
+function memNew() {
+  var pool = shuffle(dict.map(function (_, i) { return i; })).slice(0, 6), tiles = [];
+  pool.forEach(function (i) { tiles.push({ r: i, kind: "g" }, { r: i, kind: "n" }); });
+  mem = { tiles: shuffle(tiles), open: [], moves: 0, found: 0, lock: false };
+  drawMem();
+}
+function drawMem() {
+  document.getElementById("mem").innerHTML = mem.tiles.map(function (t, k) {
+    var show = t.up || t.done, n = dict[t.r][0];
+    return '<button type="button" data-m="' + k + '" class="tile' + (show ? " up" : "") + (t.done ? " done" : "") + '" aria-label="' +
+      (show ? n + (t.kind === "g" ? " rune" : " name") : "Hidden stone " + (k + 1)) + '">' +
+      (show ? (t.kind === "g" ? glyph(n) : "<span>" + n + "</span>") : "<i></i>") + "</button>";
+  }).join("");
+  document.getElementById("mem-info").textContent = mem.found === 6
+    ? "All six pairs found in " + mem.moves + " turns." : "Turns: " + mem.moves + " · Pairs found: " + mem.found + " of 6";
+}
+document.getElementById("mem").onclick = function (ev) {
+  var b = ev.target.closest ? ev.target.closest("[data-m]") : null;
+  if (!b || mem.lock) return;
+  var k = +b.getAttribute("data-m"), t = mem.tiles[k];
+  if (t.up || t.done) return;
+  t.up = true; mem.open.push(k); carve();
+  if (mem.open.length === 2) {
+    mem.moves++;
+    var a = mem.tiles[mem.open[0]], c = mem.tiles[mem.open[1]];
+    if (a.r === c.r) { a.done = c.done = true; mem.found++; mem.open = []; }
+    else {
+      mem.lock = true;
+      setTimeout(function () { a.up = c.up = false; mem.open = []; mem.lock = false; drawMem(); }, 950);
+    }
+  }
+  drawMem();
+  var again = document.querySelector('[data-m="' + k + '"]');
+  if (again) again.focus();
+};
+document.getElementById("mem-new").onclick = memNew;
+memNew();
+
+// draw a rune
+var trace = { name: "", target: [], strokes: [], down: false };
+var traceCv = document.getElementById("trace"), traceCtx = traceCv.getContext("2d");
+var tracePath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+(function () {
+  var s = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  s.setAttribute("width", "0"); s.setAttribute("height", "0"); s.setAttribute("aria-hidden", "true");
+  s.style.position = "absolute"; s.appendChild(tracePath); document.body.appendChild(s);
+})();
+function traceDraw() {
+  var c = traceCtx;
+  c.clearRect(0, 0, 240, 336);
+  c.lineCap = "round"; c.lineJoin = "round";
+  if (document.getElementById("trace-guide").checked) {
+    c.save(); c.scale(12, 12); c.strokeStyle = "rgba(233,226,210,.16)"; c.lineWidth = 1.5;
+    c.stroke(new Path2D(P[trace.name])); c.restore();
+  }
+  c.strokeStyle = "rgb(" + accRGB + ")"; c.lineWidth = 8;
+  trace.strokes.forEach(function (st) {
+    c.beginPath();
+    st.forEach(function (p, i) { if (i) c.lineTo(p[0], p[1]); else c.moveTo(p[0], p[1]); });
+    if (st.length === 1) c.lineTo(st[0][0] + .1, st[0][1]);
+    c.stroke();
+  });
+}
+function traceNew() {
+  var n;
+  do { n = names[Math.floor(Math.random() * 24)]; } while (n === trace.name);
+  trace.name = n; trace.strokes = []; trace.target = [];
+  tracePath.setAttribute("d", P[n]);
+  var len = tracePath.getTotalLength();
+  for (var s = 0; s <= len; s += .4) { var p = tracePath.getPointAtLength(s); trace.target.push([p.x * 12, p.y * 12]); }
+  var d = dict[dictIndex(n)];
+  document.getElementById("trace-ask").innerHTML = '<div class="big"><div class="stone">' + glyph(n) +
+    '</div><div class="entry"><span class="tag top">Draw this rune</span><b>' + n + '</b><span class="idea">' + d[2] + "</span></div></div>";
+  document.getElementById("trace-msg").textContent = "";
+  traceDraw();
+}
+function tracePoint(ev) {
+  var r = traceCv.getBoundingClientRect();
+  return [(ev.clientX - r.left) * 240 / r.width, (ev.clientY - r.top) * 336 / r.height];
+}
+traceCv.addEventListener("pointerdown", function (ev) {
+  ev.preventDefault();
+  try { traceCv.setPointerCapture(ev.pointerId); } catch (e) {}
+  trace.down = true; trace.strokes.push([tracePoint(ev)]); traceDraw();
+});
+traceCv.addEventListener("pointermove", function (ev) {
+  if (!trace.down) return;
+  trace.strokes[trace.strokes.length - 1].push(tracePoint(ev)); traceDraw();
+});
+["pointerup", "pointercancel", "pointerleave"].forEach(function (n) {
+  traceCv.addEventListener(n, function () { trace.down = false; });
+});
+function traceScore() {
+  var pts = [], tol = 19 * 19;
+  trace.strokes.forEach(function (st) {
+    for (var i = 0; i < st.length; i++) {
+      pts.push(st[i]);
+      if (i) {
+        var dx = st[i][0] - st[i - 1][0], dy = st[i][1] - st[i - 1][1], steps = Math.floor(Math.sqrt(dx * dx + dy * dy) / 4);
+        for (var k = 1; k < steps; k++) pts.push([st[i - 1][0] + dx * k / steps, st[i - 1][1] + dy * k / steps]);
+      }
+    }
+  });
+  if (pts.length < 2) return -1;
+  function near(a, list) {
+    for (var i = 0; i < list.length; i++) { var dx = a[0] - list[i][0], dy = a[1] - list[i][1]; if (dx * dx + dy * dy <= tol) return true; }
+    return false;
+  }
+  var cover = trace.target.filter(function (p) { return near(p, pts); }).length / trace.target.length;
+  var tidy = pts.filter(function (p) { return near(p, trace.target); }).length / pts.length;
+  return Math.round(100 * cover * tidy);
+}
+document.getElementById("trace-check").onclick = function () {
+  var s = traceScore(), msg = document.getElementById("trace-msg");
+  if (s < 0) { msg.textContent = "Draw the rune on the stone first."; return; }
+  msg.textContent = s + "% match. " + (s >= 85 ? "Carved like a rune master." : s >= 65 ? "A good likeness." :
+    s >= 40 ? "Getting there. Keep closer to the lines of the rune." : "Not much like it yet. Clear the stone and try again.");
+};
+document.getElementById("trace-clear").onclick = function () { trace.strokes = []; document.getElementById("trace-msg").textContent = ""; traceDraw(); };
+document.getElementById("trace-new").onclick = traceNew;
+document.getElementById("trace-guide").onchange = traceDraw;
+traceNew();
+
+// lore: the three families
+[0, 1, 2].forEach(function (k) {
+  document.getElementById("aett-" + k).innerHTML = dict.slice(k * 8, k * 8 + 8).map(function (r) {
+    return "<span>" + glyph(r[0]) + r[0] + "</span>";
+  }).join("");
+});
+
+// learning tracker
+function pickWeighted() {
+  var pool = quizPool(), total = 0, w = pool.map(function (i) { var x = 1 + 3 * (prefs.miss[dict[i][0]] || 0); total += x; return x; });
+  var roll = Math.random() * total;
+  for (var j = 0; j < w.length; j++) { roll -= w[j]; if (roll < 0) return pool[j]; }
+  return pool[pool.length - 1];
+}
+function quizMark(i, right) {
+  var n = dict[i][0];
+  if (right) { if (prefs.miss[n]) { prefs.miss[n]--; if (!prefs.miss[n]) delete prefs.miss[n]; } }
+  else prefs.miss[n] = Math.min(9, (prefs.miss[n] || 0) + 1);
+  savePrefs(); drawPractise();
+}
+function drawPractise() {
+  var list = Object.keys(prefs.miss).sort(function (a, b) { return prefs.miss[b] - prefs.miss[a]; });
+  document.getElementById("practise").innerHTML = list.length ? list.map(function (n) {
+    return "<span>" + glyph(n) + n + " · missed " + prefs.miss[n] + (prefs.miss[n] === 1 ? " time" : " times") + "</span>";
+  }).join("") : '<span class="msg" style="margin:0">Nothing to practise yet. Runes you get wrong will be listed here.</span>';
+}
+document.getElementById("practise-reset").onclick = function () { prefs.miss = {}; savePrefs(); drawPractise(); };
+drawPractise();
+
+// make it yours
+function spellHTML(text) {
+  var s = String(text).toLowerCase(), html = "", gap = false, any = false;
+  for (var i = 0; i < s.length; i++) {
+    var two = s.substr(i, 2), ch = s.charAt(i), list = null;
+    if (two === "th") { list = ["Thurisaz"]; i++; }
+    else if (two === "ng") { list = ["Ingwaz"]; i++; }
+    else if (ch === "x") list = ["Kenaz", "Sowilo"];
+    else if (MAP[ch]) list = [MAP[ch]];
+    else { if (/\s/.test(ch) && any) gap = true; continue; }
+    if (gap) { html += '<span class="sep" aria-hidden="true">·</span>'; gap = false; }
+    list.forEach(function (n) { html += '<span class="ch">' + glyph(n) + "</span>"; });
+    any = true;
+  }
+  return html;
+}
+function drawName() {
+  var el = document.getElementById("w-name"), runes = spellHTML(prefs.name);
+  el.hidden = !prefs.name.trim();
+  el.innerHTML = el.hidden ? "" : '<p class="eyebrow">Welcome, ' + esc(prefs.name.trim()) + "</p>" +
+    (runes ? '<div class="runeline" aria-hidden="true">' + runes + "</div>" : "");
+}
+document.getElementById("swatches").innerHTML = Object.keys(THEMES).map(function (k) {
+  return '<button type="button" data-theme="' + k + '" style="--sw:' + THEMES[k][1] + '"><i></i>' + THEMES[k][0] + "</button>";
+}).join("");
+document.getElementById("pref-place").innerHTML = '<option value="">Choose a place</option>' + Object.keys(PLACES).map(function (n) {
+  return "<option>" + n + "</option>";
+}).join("") + '<option value="other">Somewhere else (enter coordinates)</option>';
+function syncForm() {
+  document.getElementById("pref-name").value = prefs.name;
+  document.getElementById("pref-sound").checked = prefs.sound;
+  document.getElementById("pref-alarm").checked = prefs.alarm;
+  document.getElementById("pref-sun").checked = prefs.sun.on;
+  document.getElementById("pref-place").value = prefs.sun.place;
+  document.getElementById("pref-lat").value = prefs.sun.lat;
+  document.getElementById("pref-lon").value = prefs.sun.lon;
+  document.getElementById("pref-coords").hidden = prefs.sun.place !== "other";
+  document.getElementById("pref-skip").checked = prefs.skip;
+  document.getElementById("pref-night").value = prefs.nightCol || "#93bde3";
+  document.getElementById("pref-day").value = prefs.dayCol || "#e8b855";
+  var sw = document.querySelectorAll("#swatches button");
+  for (var i = 0; i < sw.length; i++) sw[i].setAttribute("aria-pressed", sw[i].getAttribute("data-theme") === prefs.theme ? "true" : "false");
+  document.getElementById("sun-out").textContent = prefs.sun.on ? sunInfo : "Off. The times written in your tables are used.";
+}
+function prefsChanged() {
+  applyTheme(); recompute(); renderAll(); syncForm(); drawName(); drawPractise(); traceDraw();
+}
+document.getElementById("pref-name").oninput = function () { prefs.name = this.value.slice(0, 30); drawName(); savePrefs(); };
+document.getElementById("swatches").onclick = function (ev) {
+  var b = ev.target.closest ? ev.target.closest("[data-theme]") : null;
+  if (!b) return;
+  prefs.theme = b.getAttribute("data-theme"); savePrefs(); applyTheme(); syncForm(); traceDraw();
+};
+document.getElementById("pref-sound").onchange = function () {
+  prefs.sound = this.checked; savePrefs();
+  if (prefs.sound) audioStart();
+  windSet(); carve(.05);
+};
+document.getElementById("pref-alarm").onchange = function () { prefs.alarm = this.checked; savePrefs(); if (prefs.alarm) audioStart(); };
+document.getElementById("alarm-test").onclick = function () { audioStart(); alarmGo(curName || "Fehu"); };
+function sunChanged() {
+  prefs.sun = { on: document.getElementById("pref-sun").checked, place: document.getElementById("pref-place").value,
+    lat: document.getElementById("pref-lat").value, lon: document.getElementById("pref-lon").value };
+  savePrefs(); recompute(); renderAll(); syncForm();
+}
+["pref-sun", "pref-place", "pref-lat", "pref-lon"].forEach(function (id) { document.getElementById(id).onchange = sunChanged; });
+syncForm();
+drawName();
+document.getElementById("read-draw").addEventListener("click", function () { carve(0); carve(.35); carve(.7); });
+document.getElementById("cast").addEventListener("click", function () { carve(0); carve(.3); carve(.6); });
+
+// ---------- skip, moon, seasons, week and month runes, cards, quiz levels, extra alphabets, colours ----------
+var skipTimer = 0;
+function introState() {
+  var w = document.getElementById("welcome"), b = document.getElementById("skip");
+  var still = !!prefs.skip || (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
+  clearTimeout(skipTimer);
+  w.classList.toggle("skip", !!prefs.skip);
+  b.hidden = still;
+  if (!still) skipTimer = setTimeout(function () { b.hidden = true; }, 3600);
+}
+document.getElementById("skip").onclick = function () {
+  document.getElementById("welcome").classList.add("skip"); this.hidden = true;
+};
+if (!document.getElementById("welcome").hidden) introState();
+
+function moonInfo(d) {
+  var M = 29.530588853, jd = (d || new Date()).getTime() / 86400000 + 2440587.5;
+  var age = ((jd - 2451550.26) % M + M) % M, f = age / M;
+  return { k: (1 - Math.cos(2 * Math.PI * f)) / 2, waxing: f < .5, toFull: ((M / 2 - age) % M + M) % M, toNew: M - age,
+    name: f < .03 || f > .97 ? "New moon" : f < .22 ? "Waxing crescent" : f < .28 ? "First quarter" : f < .47 ? "Waxing gibbous" :
+      f < .53 ? "Full moon" : f < .72 ? "Waning gibbous" : f < .78 ? "Last quarter" : "Waning crescent" };
+}
+function moonParts(m) {
+  var rx = Math.max(.01, 9 * Math.abs(1 - 2 * m.k)).toFixed(2);
+  return '<circle class="dark" cx="10" cy="10" r="9"/>' + (m.k < .01 ? "" : m.k > .99 ? '<circle class="lit" cx="10" cy="10" r="9"/>' :
+    '<path class="lit"' + (m.waxing ? "" : ' transform="translate(20 0) scale(-1 1)"') + ' d="M10 1A9 9 0 0 1 10 19A' + rx + " 9 0 0 " +
+    (m.k < .5 ? 0 : 1) + ' 10 1Z"/>');
+}
+function drawMoon() {
+  var m = moonInfo(), pct = Math.round(m.k * 100), svg = '<svg class="moon" viewBox="0 0 20 20" aria-hidden="true">' + moonParts(m) + "</svg>";
+  function when(days) {
+    var d = new Date(Date.now() + days * 86400000), n = Math.round(days);
+    return (n < 1 ? "within a day" : "in about " + n + (n === 1 ? " day" : " days")) + ", around " +
+      d.toLocaleDateString([], { weekday: "long", day: "numeric", month: "long" });
+  }
+  document.getElementById("w-moon").innerHTML = svg + "<span>" + m.name + " · " + pct + "% lit</span>";
+  document.getElementById("dial-moon").innerHTML = moonParts(m);
+  document.getElementById("moon-big").innerHTML = svg + "<div><b>" + m.name + "</b><p>" + pct + "% of the moon's face is lit.</p><p>Full moon " +
+    when(m.toFull) + ".</p><p>New moon " + when(m.toNew) + ".</p><p>The shape shown is the view from the northern half of the world. Dates are worked out from the average length of the moon's cycle, so they can be a day out.</p></div>";
+}
+
+var FEASTS = [
+  ["Yule", 12, 21, "about 21 December", "Midwinter and the longest night. The word comes from the old Norse and English midwinter feast."],
+  ["Imbolc", 2, 1, "1 February", "The first stirrings of spring, halfway between midwinter and the spring equinox. A Gaelic festival."],
+  ["Ostara", 3, 20, "about 20 March", "The spring equinox, when day and night are equal and the light takes the lead."],
+  ["Beltane", 5, 1, "1 May", "The start of summer in the Gaelic calendar, traditionally marked with bonfires."],
+  ["Litha", 6, 21, "about 21 June", "Midsummer and the longest day."],
+  ["Lammas", 8, 1, "1 August", "The first harvest, also called Lughnasadh. Lammas is the old English name and means loaf mass."],
+  ["Mabon", 9, 22, "about 22 September", "The autumn equinox and the second harvest. The name itself is modern, from the 1970s."],
+  ["Samhain", 10, 31, "31 October", "The end of the harvest and the start of winter in the Gaelic calendar."]
+];
+function drawSeasons() {
+  var now = new Date(), y = now.getFullYear(), today = new Date(y, now.getMonth(), now.getDate()), next = null;
+  function ang(m, d) { return (Math.round((new Date(2001, m - 1, d) - new Date(2001, 0, 1)) / 86400000) - 354) / 365 * 2 * Math.PI; }
+  function at(a, r) { return (r * Math.sin(a)).toFixed(1) + "," + (-r * Math.cos(a)).toFixed(1); }
+  var list = FEASTS.map(function (f) {
+    var d = new Date(y, f[1] - 1, f[2]);
+    if (d < today) d = new Date(y + 1, f[1] - 1, f[2]);
+    var it = { f: f, days: Math.round((d - today) / 86400000) };
+    if (!next || it.days < next.days) next = it;
+    return it;
+  });
+  var svg = '<circle r="140"/><circle r="52"/>';
+  list.forEach(function (it) {
+    var a = ang(it.f[1], it.f[2]), p1 = at(a, 52).split(","), p2 = at(a, 140).split(","), p3 = at(a, 170).split(","), on = it === next;
+    svg += '<line x1="' + p1[0] + '" y1="' + p1[1] + '" x2="' + p2[0] + '" y2="' + p2[1] + '"/><circle class="knob' + (on ? " next" : "") +
+      '" cx="' + p2[0] + '" cy="' + p2[1] + '" r="5"/><text' + (on ? ' class="next"' : "") + ' x="' + p3[0] + '" y="' + p3[1] +
+      '" text-anchor="middle" dominant-baseline="middle">' + it.f[0] + "</text>";
+  });
+  var ta = ang(now.getMonth() + 1, now.getDate()), t1 = at(ta, 52).split(","), t2 = at(ta, 140).split(",");
+  svg += '<line class="today" x1="' + t1[0] + '" y1="' + t1[1] + '" x2="' + t2[0] + '" y2="' + t2[1] + '"/><circle class="dot" cx="' + t2[0] +
+    '" cy="' + t2[1] + '" r="4"/><text class="mid" y="1" text-anchor="middle" dominant-baseline="middle">' +
+    now.toLocaleDateString([], { day: "numeric", month: "short" }).toUpperCase() + "</text>";
+  document.getElementById("yearwheel").innerHTML = svg;
+  document.getElementById("feast-next").textContent = next.days === 0 ? "Today is " + next.f[0] + "."
+    : next.f[0] + " is the next festival, in " + next.days + (next.days === 1 ? " day." : " days.") + " The bright line on the wheel marks today.";
+  document.getElementById("feasts").innerHTML = list.slice().sort(function (a, b) { return a.days - b.days; }).map(function (it) {
+    return "<li" + (it === next ? ' class="next"' : "") + "><div><b>" + it.f[0] + "</b><small>" + it.f[3] + " · " +
+      (it.days === 0 ? "today" : "in " + it.days + (it.days === 1 ? " day" : " days")) + "</small></div><span>" + it.f[4] + "</span></li>";
+  }).join("");
+}
+
+function hashPick(s) {
+  var h = 2166136261;
+  for (var i = 0; i < s.length; i++) h = Math.imul(h ^ s.charCodeAt(i), 16777619);
+  h ^= h >>> 13; h = Math.imul(h, 0x5bd1e995); h ^= h >>> 15;
+  return dict[(h >>> 0) % 24][0];
+}
+function drawTrio() {
+  var t = new Date(), y = t.getFullYear(), mon = new Date(y, t.getMonth(), t.getDate() - (t.getDay() + 6) % 7);
+  document.getElementById("daily").innerHTML = big(hashPick(y + "-" + (t.getMonth() + 1) + "-" + t.getDate()),
+    "Today · " + t.toLocaleDateString([], { weekday: "long", day: "numeric", month: "long" }));
+  document.getElementById("weekly").innerHTML = big(hashPick("w" + mon.getFullYear() + "-" + (mon.getMonth() + 1) + "-" + mon.getDate()),
+    "This week · from " + mon.toLocaleDateString([], { day: "numeric", month: "long" }));
+  document.getElementById("monthly").innerHTML = big(hashPick("m" + y + "-" + (t.getMonth() + 1)),
+    "This month · " + t.toLocaleDateString([], { month: "long", year: "numeric" }));
+}
+function newDay() { drawMoon(); drawSeasons(); drawTrio(); }
+newDay();
+
+// cards
+var cardBack = null;
+function showCard(title, sub, items, runeHTML) {
+  document.getElementById("card").innerHTML = '<p class="eyebrow">' +
+    esc(new Date().toLocaleDateString([], { day: "numeric", month: "long", year: "numeric" })) + "</p><h3>" + esc(title) + "</h3>" +
+    '<p class="csub">' + esc(sub || "") + "</p>" + (runeHTML ? '<div class="runeline">' + runeHTML + "</div>" : "") +
+    (items ? '<div class="crunes">' + items.map(function (it) {
+      return '<div><div class="stone">' + glyph(it.name) + "</div>" + esc(it.label || "") + "<b>" + it.name + "</b></div>";
+    }).join("") + "</div>" : "") + '<p class="cfoot">Rune Hours</p>';
+  cardBack = document.activeElement;
+  document.getElementById("veil").hidden = false;
+  document.getElementById("card-close").focus();
+}
+function hideCard() {
+  document.getElementById("veil").hidden = true;
+  if (cardBack && cardBack.focus) cardBack.focus();
+}
+document.getElementById("card-close").onclick = hideCard;
+document.getElementById("veil").onclick = function (ev) { if (ev.target === this) hideCard(); };
+document.addEventListener("keydown", function (ev) { if (ev.key === "Escape" && !document.getElementById("veil").hidden) hideCard(); });
+document.getElementById("write-card").onclick = function () {
+  var words = writeIn.value.trim();
+  showCard(words || "Runes", "", null, spellHTML(words));
+};
+document.getElementById("j-search").oninput = drawJournal;
+document.getElementById("j-rune").onchange = drawJournal;
+
+// quiz levels and the timed round
+function quizPool() {
+  var v = document.getElementById("quiz-level").value, out = [];
+  for (var i = 0; i < 24; i++) if (v === "" || Math.floor(i / 8) === +v) out.push(i);
+  return out;
+}
+function showTimer() {
+  document.getElementById("quiz-timer").textContent = quiz.timed ? "Time left: " + quiz.timed.left + " s · Right so far: " + quiz.timed.right
+    : prefs.best ? "Your best 60-second round: " + prefs.best + " right." : "";
+}
+document.getElementById("quiz-level").onchange = function () { quiz.q = null; newQ(); };
+document.getElementById("quiz-timed").onclick = function () {
+  if (quiz.timed) return;
+  quiz.timed = { left: 60, right: 0 }; quiz.q = null; newQ(); showTimer();
+  quiz.timed.id = setInterval(function () {
+    quiz.timed.left--;
+    if (quiz.timed.left > 0) { showTimer(); return; }
+    clearInterval(quiz.timed.id);
+    var got = quiz.timed.right; quiz.timed = null;
+    if (got > prefs.best) { prefs.best = got; savePrefs(); }
+    document.getElementById("quiz-timer").textContent = "Time. You got " + got + " right in 60 seconds. Your best is " + prefs.best + ".";
+    newQ();
+  }, 1000);
+};
+showTimer();
+
+// the two later alphabets, shown with a rune font
+var SETS = {
+  younger: { lead: "The 16 runes of the Younger Futhark, the alphabet of the Viking Age, used in Scandinavia from about 750. With fewer runes than before, several had to stand for more than one sound.", runes: [
+    ["ᚠ", "Fé", "f, v", "Wealth, cattle"], ["ᚢ", "Úr", "u, o, w", "Drizzle in the Icelandic poem, slag from iron in the Norwegian"],
+    ["ᚦ", "Thurs", "th", "Giant"], ["ᚬ", "Óss", "nasal a, later o", "A god, or a river mouth"], ["ᚱ", "Reið", "r", "Riding"],
+    ["ᚴ", "Kaun", "k, g", "Sore, ulcer"], ["ᚼ", "Hagall", "h", "Hail"], ["ᚾ", "Nauðr", "n", "Need"], ["ᛁ", "Íss", "i, e", "Ice"],
+    ["ᛅ", "Ár", "a", "Year, good harvest"], ["ᛋ", "Sól", "s", "Sun"], ["ᛏ", "Týr", "t, d", "The god Tyr"],
+    ["ᛒ", "Bjarkan", "b, p", "Birch"], ["ᛘ", "Maðr", "m", "Man, person"], ["ᛚ", "Lögr", "l", "Water, sea"], ["ᛦ", "Ýr", "a second r sound, later y", "Yew"] ] },
+  anglo: { lead: "The 29 runes of the Old English rune poem. The Anglo-Saxon futhorc kept the old runes, reshaped some of them and added new ones for the sounds of Old English.", runes: [
+    ["ᚠ", "Feoh", "f", "Wealth"], ["ᚢ", "Ur", "u", "Aurochs"], ["ᚦ", "Thorn", "th", "Thorn"], ["ᚩ", "Os", "o", "Mouth, or a god"],
+    ["ᚱ", "Rad", "r", "Riding"], ["ᚳ", "Cen", "c", "Torch"], ["ᚷ", "Gyfu", "g", "Gift"], ["ᚹ", "Wynn", "w", "Joy"],
+    ["ᚻ", "Hægl", "h", "Hail"], ["ᚾ", "Nyd", "n", "Need"], ["ᛁ", "Is", "i", "Ice"], ["ᛄ", "Ger", "j, y", "Year, harvest"],
+    ["ᛇ", "Eoh", "eo", "Yew"], ["ᛈ", "Peorth", "p", "Unknown"], ["ᛉ", "Eolhx", "x", "Elk-sedge"], ["ᛋ", "Sigel", "s", "Sun"],
+    ["ᛏ", "Tir", "t", "The god Tiw, or a guiding star"], ["ᛒ", "Beorc", "b", "Birch"], ["ᛖ", "Eh", "e", "Horse"], ["ᛗ", "Mann", "m", "Person"],
+    ["ᛚ", "Lagu", "l", "Water, sea"], ["ᛝ", "Ing", "ng", "The hero Ing"], ["ᛟ", "Ethel", "oe", "Family estate"], ["ᛞ", "Dæg", "d", "Day"],
+    ["ᚪ", "Ac", "a", "Oak"], ["ᚫ", "Æsc", "æ", "Ash tree"], ["ᚣ", "Yr", "y", "Uncertain, perhaps a bow"],
+    ["ᛡ", "Ior", "io", "Uncertain, a river creature"], ["ᛠ", "Ear", "ea", "Earth, the grave"] ] }
+};
+var elderLead = document.getElementById("dict-lead").textContent;
+function drawSet(key) {
+  var set = SETS[key], extra = document.getElementById("dict-extra");
+  document.getElementById("dict").hidden = !!set;
+  extra.hidden = !set;
+  document.getElementById("dict-lead").textContent = set ? set.lead + " These signs are shown with a rune font loaded from the web, so if you see empty boxes the font did not load." : elderLead;
+  extra.innerHTML = set ? set.runes.map(function (r) {
+    return '<li><span class="rch" aria-hidden="true">' + r[0] + '</span><div class="entry"><b>' + r[1] + '</b><span class="tag">sound: ' + r[2] +
+      '</span><span class="lit">' + r[3] + "</span></div></li>";
+  }).join("") : "";
+  var bs = document.querySelectorAll("#dict-sets button");
+  for (var i = 0; i < bs.length; i++) bs[i].setAttribute("aria-pressed", bs[i].getAttribute("data-set") === key ? "true" : "false");
+}
+document.getElementById("dict-sets").onclick = function (ev) {
+  var b = ev.target.closest ? ev.target.closest("[data-set]") : null;
+  if (b) drawSet(b.getAttribute("data-set"));
+};
+drawSet("elder");
+
+// own colours for night and day, and the skip choice
+document.getElementById("pref-night").oninput = function () { prefs.nightCol = this.value; applyTheme(); savePrefs(); };
+document.getElementById("pref-day").oninput = function () { prefs.dayCol = this.value; applyTheme(); savePrefs(); };
+document.getElementById("col-reset").onclick = function () { prefs.nightCol = ""; prefs.dayCol = ""; applyTheme(); savePrefs(); syncForm(); };
+document.getElementById("pref-skip").onchange = function () { prefs.skip = this.checked; savePrefs(); };
+
+function sync(text) { var el = document.getElementById("sync"); el.textContent = text; el.hidden = !text; }
+function local() {
+  try { var t = localStorage.getItem("rune-hours"); if (t) apply(JSON.parse(t)); } catch (e) {}
+}
+renderAll();
+tick();
+setInterval(tick, 1000);
+if (window.claude && window.claude.use) {
+  Promise.all([window.claude.use("db"), window.claude.use("user")]).then(function (res) {
+    var db = res[0], user = res[1];
+    if (!db) { local(); localJournal(); return; }
+    store = db.doc("config/hours");
+    var timer = setTimeout(function () {
+      sync("Couldn't reach your saved runes yet. Showing the last ones this page has.");
+    }, 10000);
+    store.onSnapshot(function (snap) {
+      if (!snap.metadata || !snap.metadata.fromCache) { clearTimeout(timer); sync(""); }
+      if (snap.exists) apply(snap.data());
+    }, function () { clearTimeout(timer); sync("Your saved runes can't be loaded right now."); });
+    if (user && user.can) user.can("data.write").then(function (ok) {
+      if (ok === false) { canWrite = false; renderAll(); }
+    }, function () {});
+    if (user && user.id) user.id().then(function (uid) {
+      if (!uid) { localJournal(); return; }
+      jStore = db.collection("data/users/" + uid).doc("journal");
+      pStore = db.collection("data/users/" + uid).doc("prefs");
+      document.getElementById("prefs-where").textContent = "These choices are saved with this page and are private to you.";
+      pStore.get().then(function (snap) { if (snap.exists) { mergePrefs(snap.data()); prefsChanged(); } }, function () { pStore = null; });
+      jStore.get().then(function (snap) { journalLoaded(snap.exists ? snap.data().entries : []); },
+        function () { jStore = null; localJournal(); });
+    }, localJournal); else localJournal();
+  }, function () { local(); localJournal(); });
+} else { local(); localJournal(); }
+
+// dictionary
+var LONG = {
+  Fehu: "Cattle were the measure of wealth in the early Germanic world, so this rune stands for wealth that moves: it can be earned, traded or lost.",
+  Uruz: "The aurochs was a huge wild ox, now extinct. Facing one was a test of courage, which is why the rune carries ideas of strength and stamina.",
+  Thurisaz: "Named for the giants of Norse myth. The Old English rune poem calls it a thorn instead. Either way it is something sharp that hurts whoever grabs it.",
+  Ansuz: "The name means one of the gods and is usually tied to Odin, who in the myths won the runes and rules over speech and poetry.",
+  Raidho: "Riding, or a wagon. The rune poem jokes that riding seems easy to someone sitting indoors and much harder to the one out on the road.",
+  Kenaz: "The Old English poem describes a torch burning where nobles rest. The Norse poems give the same rune a darker name that means a sore.",
+  Gebo: "In the old sense a gift tied giver and receiver together, with a duty on both sides. The rune looks the same whichever way up it lies.",
+  Wunjo: "Joy. The rune poem says it belongs to someone who knows little of sorrow and has enough to live on.",
+  Hagalaz: "Hail, which the poems call the coldest of grains. It can flatten a crop in minutes and then melts away into water.",
+  Nauthiz: "Need or hardship. The poem says need presses on the heart, yet it can turn into a help for those who heed it in time.",
+  Isa: "Ice: bright, smooth and treacherous underfoot. A single upright stroke, the simplest rune to carve.",
+  Jera: "The year, meaning a good year and its harvest. It is about the slow turn of the seasons, not a single moment.",
+  Eihwaz: "The yew, a very long-lived evergreen whose tough wood made the best bows. Yews are often found in old burial grounds, hence the link with life and death.",
+  Perthro: "The one rune whose name nobody can translate for certain. The Old English poem connects it with play and laughter in the hall, which is where the dice cup idea comes from.",
+  Algiz: "Usually explained as elk, or as the elk-sedge of the Old English poem, a plant that cuts anyone who grasps it. Its shape is often read as antlers or a raised hand.",
+  Sowilo: "The sun. The poems call it the hope of seafarers, who look to it on their way across the water.",
+  Tiwaz: "Named after Tyr, the god who put his hand in the wolf Fenrir's mouth so the gods could bind him. An old poem tells warriors to carve this rune for victory.",
+  Berkano: "The birch, one of the first trees to come into leaf in the northern spring, so it stands for new growth, mothers and birth.",
+  Ehwaz: "The horse, the pride of nobles in the rune poem. It is linked with the trust between a horse and its rider.",
+  Mannaz: "A person, or humankind as a whole. The poem says people are a joy to their kin, though each must part from the others in the end.",
+  Laguz: "Water, a lake or the sea. The poem pictures a rough sea that frightens those in an unsteady boat.",
+  Ingwaz: "Named after Ing, a god or hero connected with Freyr and with fertile land. Like a seed, it holds something whole inside it.",
+  Dagaz: "Day, or daylight. The poem calls it a light sent to rich and poor alike.",
+  Othala: "Inherited land, the family estate that was passed down and not sold. Fehu at the start of the row is wealth that moves; Othala is wealth that stays."
+};
+document.getElementById("dict").innerHTML = dict.map(function (r, i) {
+  return '<li><details data-i="' + i + '"><summary>' + glyph(r[0]) + entry(r, "sound: " + r[1]) +
+    '<span class="plus" aria-hidden="true">+</span></summary><div class="more"><p>' + LONG[r[0]] + '</p><p class="poem"><b>The Old English rune poem, in short:</b> ' + POEM[r[0]] + "</p><p>Rune " + (i + 1) +
+    " of 24 · " + aetts[Math.floor(i / 8)] + '</p><p class="rules"></p></div></details></li>';
+}).join("");
+document.addEventListener("toggle", function (ev) {
+  var d = ev.target;
+  if (!d.getAttribute || d.getAttribute("data-i") === null || !d.open) return;
+  var name = dict[+d.getAttribute("data-i")][0], found = [];
+  hours.night.forEach(function (r) { if (r[2] === name) found.push(fmt(r[0]) + " – " + fmt(r[1]) + " (night)"); });
+  hours.day.forEach(function (r) { if (r[2] === name) found.push(fmt(r[0]) + " – " + fmt(r[1]) + " (day)"); });
+  d.querySelector(".rules").textContent = found.length ? "Its hour on your tables: " + found.join(", ") + "." : "It has no hour on your tables.";
+}, true);
+
+// wheel: ring k holds dict[k*8 .. k*8+7]; the marker sits at 180deg (left)
+var wheel = document.getElementById("wheel"), rings = [], rot = [180, 180, 180], sel = [0, 0, 0];
+function showPicks() {
+  var html = "";
+  for (var k = 0; k < 3; k++) {
+    html += '<li class="k' + k + '">' + glyph(dict[k * 8 + sel[k]][0]) + entry(dict[k * 8 + sel[k]], aetts[k]) + "</li>";
+    var bs = rings[k].children;
+    for (var i = 0; i < bs.length; i++) bs[i].classList.toggle("sel", i === sel[k]);
+  }
+  document.getElementById("picks").innerHTML = html;
+}
+function turn(k, i, spin) {
+  var target = 180 - i * 45, delta;
+  if (spin) {
+    var dir = k === 1 ? -1 : 1;
+    delta = dir * ((((dir * (target - rot[k])) % 360) + 360) % 360 + 360);
+  } else {
+    delta = (((target - rot[k]) % 360) + 540) % 360 - 180;
+  }
+  rot[k] += delta;
+  sel[k] = i;
+  rings[k].style.setProperty("--rot", rot[k] + "deg");
+}
+for (var k = 0; k < 3; k++) {
+  var ring = document.createElement("div");
+  ring.className = "ring k" + k;
+  for (var i = 0; i < 8; i++) {
+    var b = document.createElement("button");
+    b.type = "button";
+    b.style.setProperty("--a", i * 45 + "deg");
+    b.setAttribute("aria-label", dict[k * 8 + i][0]);
+    b.title = dict[k * 8 + i][0];
+    b.innerHTML = glyph(dict[k * 8 + i][0], "carved");
+    b.onclick = (function (k, i) { return function () { turn(k, i); showPicks(); }; })(k, i);
+    ring.appendChild(b);
+  }
+  wheel.appendChild(ring);
+  rings.push(ring);
+}
+showPicks();
+document.getElementById("cast").onclick = function () {
+  for (var k = 0; k < 3; k++) turn(k, Math.floor(Math.random() * 8), true);
+  showPicks();
+  document.getElementById("hourmsg").textContent = "";
+};
+document.getElementById("hour").onclick = function () {
+  var c = current();
+  if (!c) return;
+  var n = dictIndex(c.row[2]);
+  turn(Math.floor(n / 8), n % 8);
+  showPicks();
+  document.getElementById("hourmsg").textContent =
+    "This hour belongs to " + c.row[2] + " (" + fmt(c.row[0]) + " – " + fmt(c.row[1]) + ").";
+};
+</script>
+</body>
+</html>
